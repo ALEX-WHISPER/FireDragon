@@ -110,7 +110,6 @@ cc.Class({
             this.content.removeChild(first);
             
             this.msgItemPoolController.itemPool.put(first);
-            console.log("item reuse");
         }
 
         let item = null;
