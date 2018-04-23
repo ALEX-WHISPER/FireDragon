@@ -3,7 +3,6 @@
   "appSecret": "",
   "encryptJs": true,
   "excludeScenes": [],
-  "fb-instant-games": {},
   "includeAnySDK": false,
   "includeSDKBox": false,
   "inlineSpriteFrames": true,
@@ -21,9 +20,6 @@
   },
   "packageName": "org.cocos2d.start_project",
   "privateKey": "",
-  "qqplay": {
-    "orientation": "portrait"
-  },
   "renderMode": "0",
   "startScene": "59991484-0d27-4c95-9df4-22ab0acbecd2",
   "title": "start_project",
