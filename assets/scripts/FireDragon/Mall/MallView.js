@@ -8,6 +8,11 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        
+        lackOfVoucherPanel: {
+            default: null,
+            type: cc.Node
+        },
 
         //#region  Purchase UI elems
         label_CurTreasure_Purchase: {
@@ -77,7 +82,8 @@ cc.Class({
         this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.hasInited_Redeem ? this.curTreasureAmount :'value', curTreasureAmount);
         // this.label_RedeemedAmount.string = this.label_RedeemedAmount.string.replace('value', curVoucherPointAmount);
         this.label_RedeemedAmount.string = curVoucherPointAmount;
-        this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.hasInited_Redeem ? this.curTreasureAmount : 'value', curVoucherPointAmount);
+        
+        this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.hasInited_Redeem ? this.curVoucherPointAmount : 'value', curVoucherPointAmount);
         this.label_Rule.string = this.label_Rule.string.replace(this.hasInited_Redeem ? this.treasurePerPoint : 'value', treasurePerPoint);
         this.slider_ChooseRedeemAmount.progress = 1;
 
@@ -87,6 +93,18 @@ cc.Class({
         this.treasurePerPoint = treasurePerPoint;
         
         this.hasInited_Redeem = true;        
+    },
+
+    activateLackOfVoucherPanel: function() {
+        if (this.lackOfVoucherPanel.active === false) {
+            this.lackOfVoucherPanel.active = true;
+        }
+    },
+
+    deactivateLackOfVoucherPanel: function() {
+        if (this.lackOfVoucherPanel.active === true) {
+            this.lackOfVoucherPanel.active = false;
+        }
     },
 
     activateConfirmPanel: function() {

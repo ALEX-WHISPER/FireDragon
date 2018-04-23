@@ -53,7 +53,6 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-
 //  custum structs
         mallData_Purchase: {
             default: {},
@@ -174,6 +173,18 @@ cc.Class({
         this.mallPanel_RedeemBlock.active = false;
         this._gameControl.onMallToGame();
     },
+
+    onSwitchMallBlock: function() {
+        if (this.mallPanel_PurchaseBlock.active) {
+            if (this._gameControl.curVoucherPoint <= 0) {
+                this._mallView.activateLackOfVoucherPanel();
+                return;
+            }
+            this.enterRedeemBlock();
+        } else if (this.mallPanel_RedeemBlock.active) {
+            this.enterPurchaseBlock();
+        }
+    },
 //  interfaces switching
 
 //  confirming purchase
@@ -271,17 +282,9 @@ cc.Class({
 
         console.log(cc.js.formatStr("curTreasure: %s, redeemVoucherAmount: %s, treasurePerPoint: %s", curTreasure, this._mallModel.redeemVoucherAmount, this._gameControl.treasurePerPoint));
         this._gameControl.updateTreasureOnController(curTreasure + increment);
+        this._gameControl.updateVoucherPointOnController(this.mallData_Redeem.curVoucherPointAmount - this._mallModel.redeemVoucherAmount);
         this._mallView.updateTreasureAmount(curTreasure + increment);
     },
-
-    onSwitchMallBlock: function() {
-        if (this.mallPanel_PurchaseBlock.active) {
-            this.enterRedeemBlock();
-        } else if (this.mallPanel_RedeemBlock.active) {
-            this.enterPurchaseBlock();
-        }
-    },
-
     //  on hit exit button
     onExit: function() {
         NOTIFICATION.emit(mallFlags.MALL_2_GAME);
