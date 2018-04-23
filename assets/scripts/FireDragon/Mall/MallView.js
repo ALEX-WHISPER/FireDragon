@@ -47,16 +47,26 @@ cc.Class({
             type: cc.Slider
         },
         //#endregion
+
+        hasInited_Purchase: {
+            default: false,
+            visible: false
+        },
+        hasInited_Redeem: {
+            default: false,
+            visible: false
+        }
     },
 
     init_PurchaseBlock: function(initValueSet) {
         let curTreasureAmount = initValueSet.curTreasureAmount;
         let isAutoRedeem = initValueSet.isAutoRedeem;
-
-        this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace('value', curTreasureAmount);
+        
+        this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace(this.hasInited_Purchase ? this.curTreasureAmount : 'value', curTreasureAmount);
         this.toggle_AutoRedeem_Purchase.isChecked = isAutoRedeem;
-
         this.curTreasureAmount = curTreasureAmount;
+
+        this.hasInited_Purchase = true;
     },
 
     init_RedeemBlock: function(initValueSet) {
@@ -64,16 +74,19 @@ cc.Class({
         let curVoucherPointAmount = initValueSet.curVoucherPointAmount;
         let treasurePerPoint = initValueSet.treasurePerPoint;
 
-        this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace('value', curTreasureAmount);
-        this.label_RedeemedAmount.string = this.label_RedeemedAmount.string.replace('value', curVoucherPointAmount);
-        this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace('value', curVoucherPointAmount);
-        this.label_Rule.string = this.label_Rule.string.replace('value', treasurePerPoint);
+        this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.hasInited_Redeem ? this.curTreasureAmount :'value', curTreasureAmount);
+        // this.label_RedeemedAmount.string = this.label_RedeemedAmount.string.replace('value', curVoucherPointAmount);
+        this.label_RedeemedAmount.string = curVoucherPointAmount;
+        this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.hasInited_Redeem ? this.curTreasureAmount : 'value', curVoucherPointAmount);
+        this.label_Rule.string = this.label_Rule.string.replace(this.hasInited_Redeem ? this.treasurePerPoint : 'value', treasurePerPoint);
         this.slider_ChooseRedeemAmount.progress = 1;
 
         this.curTreasureAmount = curTreasureAmount;
         this.curVoucherPointAmount = curVoucherPointAmount;
         this.redeemAmount = curVoucherPointAmount;
         this.treasurePerPoint = treasurePerPoint;
+        
+        this.hasInited_Redeem = true;        
     },
 
     activateConfirmPanel: function() {
@@ -87,19 +100,26 @@ cc.Class({
             this.confirmingPanle.active = false;
         }
     },
+    
+    updateCurVoucherPointAmount: function(tarVoucherPointAmount) {
+        // this.label_RedeemedAmount.string = this.label_RedeemedAmount.string.replace(this.curVoucherPointAmount, tarVoucherPointAmount);
+        this.label_RedeemedAmount.string = tarVoucherPointAmount;        
+        this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.curVoucherPointAmount, tarVoucherPointAmount);
+        
+        this.curVoucherPointAmount = tarVoucherPointAmount;
+    },
 
-    // onUpdateTreasureAmount: function(event) {
-    //     let newTreasureAmount = this.curTreasureAmount + event.increment * event.unit;
-    //     this.curTreasureLabel.string = this.curTreasureLabel.string.replace(this.curTreasureAmount, newTreasureAmount);
-    //     this.curTreasureAmount = newTreasureAmount;
-    // },
-
+    //#region   for slider
     updateRedeemAmount: function(tarRedeemAmount) {
         this.label_RedeemedAmount.string = tarRedeemAmount;
     },
+    //#endregion
 
     updateTreasureAmount: function(tarTreasureAmount) {
         console.log("tarTreasureAmount" + tarTreasureAmount);
-        this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.curTreasureAmount, tarTreasureAmount);        
+        this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.curTreasureAmount, tarTreasureAmount);
+        this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace(this.curTreasureAmount, tarTreasureAmount);
+        
+        this.curTreasureAmount = tarTreasureAmount;
     }
 });

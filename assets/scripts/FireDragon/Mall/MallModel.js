@@ -26,10 +26,10 @@ cc.Class({
     },
 
     init_RedeemBlock: function(mallData_Redeem) {
-        this._redeemVoucherAmount = mallData_Redeem.curTreasureAmount;
+        this._redeemVoucherAmount = mallData_Redeem.curVoucherPointAmount;
     },
 
     updateRedeemVoucherAmount: function(curRedeemAmount) {
         this._redeemVoucherAmount = curRedeemAmount;
-    }
+    },
 });

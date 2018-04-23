@@ -132,7 +132,9 @@ cc.Class({
     },
 
     enterPurchaseBlock: function() {
-        this.mallPanel_PurchaseBlock.active = true;   
+        this.init();
+        this.mallPanel_PurchaseBlock.active = true;
+        this.mallPanel_RedeemBlock.active = false;
         this.init_PurchaseVoucherPanel();
         this._mallView.init_PurchaseBlock(this.mallData_Purchase);
     },
@@ -160,20 +162,29 @@ cc.Class({
     },
 
     enterRedeemBlock: function() {
+        this.init();
         this.mallPanel_RedeemBlock.active = true;
+        this.mallPanel_PurchaseBlock.active = false;
         this._mallModel.init_RedeemBlock(this.mallData_Redeem);
         this._mallView.init_RedeemBlock(this.mallData_Redeem);
     },
 
     onMallToGame: function() {
-        this.mallPanelBlock.active = false;
+        this.mallPanel_PurchaseBlock.active = false;
+        this.mallPanel_RedeemBlock.active = false;
         this._gameControl.onMallToGame();
     },
 //  interfaces switching
 
 //  confirming purchase
     redeemVoucherPoint: function() {
+        let voucherPoint_Purchased = this.voucherItemArray[this.chosenIndex].getVoucherValues().voucherAmount;
+        this.mallData_Redeem.curVoucherPointAmount += voucherPoint_Purchased;
 
+        this._gameControl.updateVoucherPointOnController(this.mallData_Redeem.curVoucherPointAmount);
+        this._mallView.updateCurVoucherPointAmount(this.mallData_Redeem.curVoucherPointAmount);
+
+        console.log(this.mallData_Redeem.curVoucherPointAmount);
     },
 
     redeemTreasure: function() {
@@ -235,11 +246,11 @@ cc.Class({
         this.redeemVIP();   //  redeem vip
         this.deductRMB();   //  deduct rmb
 
-        if (this.mallDataSet.isAutoRedeem) { 
+        if (this.mallData_Purchase.isAutoRedeem) { 
             this.redeemTreasure();  //  redeem trasure
         }
 
-        this._mallView.deactivateConfirmPanel();        
+        this._mallView.deactivateConfirmPanel();
         this.resetPurchase();
     },
 
@@ -261,6 +272,14 @@ cc.Class({
         console.log(cc.js.formatStr("curTreasure: %s, redeemVoucherAmount: %s, treasurePerPoint: %s", curTreasure, this._mallModel.redeemVoucherAmount, this._gameControl.treasurePerPoint));
         this._gameControl.updateTreasureOnController(curTreasure + increment);
         this._mallView.updateTreasureAmount(curTreasure + increment);
+    },
+
+    onSwitchMallBlock: function() {
+        if (this.mallPanel_PurchaseBlock.active) {
+            this.enterRedeemBlock();
+        } else if (this.mallPanel_RedeemBlock.active) {
+            this.enterPurchaseBlock();
+        }
     },
 
     //  on hit exit button
