@@ -199,7 +199,7 @@ cc.Class({
     },
 
     redeemTreasure: function() {
-        if (!this.isAutoRedeem) {
+        if (!this._mallView.toggle_AutoRedeem_Purchase) {
             return;
         }
         let increment = this.voucherItemArray[this.chosenIndex].getVoucherValues().redeem_Treasure;
@@ -253,13 +253,15 @@ cc.Class({
             return;
         }
 
-        this.redeemVoucherPoint();  //  redeem voucher point
+        if (this._mallView.toggle_AutoRedeem_Purchase.isChecked) {
+            console.log("autoRedeem");
+            this.redeemTreasure();  //  redeem trasure
+        } else {
+            this.redeemVoucherPoint();  //  redeem voucher point            
+        }
+        
         this.redeemVIP();   //  redeem vip
         this.deductRMB();   //  deduct rmb
-
-        if (this.mallData_Purchase.isAutoRedeem) { 
-            this.redeemTreasure();  //  redeem trasure
-        }
 
         this._mallView.deactivateConfirmPanel();
         this.resetPurchase();

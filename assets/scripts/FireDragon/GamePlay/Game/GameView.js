@@ -109,7 +109,7 @@ cc.Class({
             this.scrollItemTotalCount--;
             this.content.removeChild(first);
             
-            this.msgItemPoolController.itemPool.put(first);
+            this.msgItemPoolController.itemPool.put(first); //  put the item been removed to object pool for reusing
         }
 
         let item = null;
