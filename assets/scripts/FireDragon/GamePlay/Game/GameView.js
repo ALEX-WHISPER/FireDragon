@@ -104,11 +104,13 @@ cc.Class({
 
     //  add catching result item to scrollView
     onScrollViewVicItemAdded: function(msg) {
-        if (this.scrollItemTotalCount >= this.msgItemPoolController.itemPool.maxCount) {
+        if (this.scrollItemTotalCount >= this.msgItemPoolController.maxCount) {
             var first = this.items.shift();
             this.scrollItemTotalCount--;
-            this.msgItemPoolController.itemPool.put(first);
             this.content.removeChild(first);
+            
+            this.msgItemPoolController.itemPool.put(first);
+            console.log("item reuse");
         }
 
         let item = null;

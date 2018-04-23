@@ -12,7 +12,9 @@ cc.Class({
 
             set: function(value) {
                 this._itemPool = value;
-            }
+            },
+
+            visible: false
         }
     },
 
