@@ -1,5 +1,5 @@
 
-var NOTIFICATION = (function () {
+window.NOTIFICATION = (function () {
     var eventList = {};
     
     function on(type, callback, target) {
@@ -88,3 +88,5 @@ var NOTIFICATION = (function () {
     }
     return {on: on, once: once, emit: emit, off: off, offByType: offByType, offByTarget: offByTarget};
 })();
+
+module.exports = NOTIFICATION;
