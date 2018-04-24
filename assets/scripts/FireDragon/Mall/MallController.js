@@ -274,6 +274,9 @@ cc.Class({
 
     onSliderEvent(sender, eventType) {
         let curRedeemAmount = Math.floor(this.mallData_Redeem.curVoucherPointAmount * sender.progress);
+        if (curRedeemAmount <= 0) {
+            curRedeemAmount = 1;
+        }
         this._mallModel.updateRedeemVoucherAmount(curRedeemAmount);
         this._mallView.updateRedeemAmount(curRedeemAmount);
     },

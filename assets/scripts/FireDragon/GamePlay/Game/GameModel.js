@@ -155,7 +155,7 @@ cc.Class({
     //  FOR DEVELOPER TESTING
     gameValuesInit: function() {
         this._curVoucherPoint = 50;
-        this._curTreasure = 100009;
+        this._curTreasure = 99;
         this._curMag = 1;
         this._magInterval = 1;
         this._treasurePerPoint = 2000;

@@ -2,7 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        gameBlock: cc.Node,
+        loginBlock: cc.Node,
         loadingBlock: cc.Node,
 
         loadingBar: cc.ProgressBar,
@@ -73,7 +73,7 @@ cc.Class({
             this.isLoadingStatusChecked = false;
 
             this.loadingBlock.active = false;
-            this.gameBlock.active = true;
+            this.loginBlock.active = true;
         }
     },
 
