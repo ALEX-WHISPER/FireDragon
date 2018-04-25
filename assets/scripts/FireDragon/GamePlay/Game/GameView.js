@@ -136,5 +136,9 @@ cc.Class({
     onRunningOutofTreasure: function() {
         this.spriteChanged_PlayButton(this.playButtonSprites);
         this.playButton.interactable = false;
+    },
+
+    onResumeEnoughTreasure: function() {
+        this.playButton.interactable = true;
     }
 });

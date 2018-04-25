@@ -137,7 +137,7 @@
 
         // jsList
         var jsList = settings.jsList;
-        var bundledScript = settings.debug ? 'src/project.dev.a0b89.js' : 'src/project.js';
+        var bundledScript = settings.debug ? 'src/project.dev.56f50.js' : 'src/project.js';
         if (jsList) {
             jsList = jsList.map(function (x) { return 'src/' + x; });
             jsList.push(bundledScript);
@@ -170,11 +170,12 @@
     }
 
     if (window.jsb) {
-        require('src/settings.5699a.js');
+        require('src/settings.ecbf4.js');
         require('src/jsb_polyfill.js');
         boot();
     }
     else if (true) {
+        wxDownloader.REMOTE_SERVER_ROOT = "http://172.12.10.126:8081/FireDragon";
         require(window._CCSettings.debug ? 'cocos2d-js.7e1d1.js' : 'cocos2d-js-min.js');
         var prevPipe = cc.loader.md5Pipe || cc.loader.assetLoader;
         cc.loader.insertPipeAfter(prevPipe, wxDownloader);

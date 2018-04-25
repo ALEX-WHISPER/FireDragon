@@ -186,7 +186,9 @@ cc.Class({
     onTreasureAdded_Recharge: function(event) {
         // console.log(cc.js.formatStr("increment: %s, unit: %s, totalCount: %s", event.increment, event.unit, event.increment*event.unit));
         let increment = event.increment;
-        this.updateTreasureOnController(this.curTreasure + increment);
+        let newTreasure = this.curTreasure + increment;
+        
+        this.updateTreasureOnController(newTreasure);
         console.log(cc.js.formatStr("GameController.curTreasure: %s", this.curTreasure));
     },
 
@@ -258,7 +260,12 @@ cc.Class({
     },
     
     updateVoucherPointOnController: function(tarVoucherPoint) {this._curVoucherPoint = tarVoucherPoint;},
-    updateTreasureOnController: function(tarTreasure) {this._curTreasure = tarTreasure;},
+    updateTreasureOnController: function(tarTreasure) {
+        if (tarTreasure > 0 && tarTreasure - this.curMag >= 0) {
+            this._gameView.onResumeEnoughTreasure();
+        }
+        this._curTreasure = tarTreasure;
+    },
     updateMagOnController: function(tarMagValue) {this._curMag = tarMagValue;},
     updateMagIntervalOnController: function(tarMagInterval) {this._magInterval = tarMagInterval;},
     updateTreasurePerPointOnController: function(tarTreasurePerPoint) {this._treasurePerPoint = tarTreasurePerPoint;}
