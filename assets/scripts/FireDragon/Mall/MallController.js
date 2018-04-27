@@ -22,6 +22,7 @@ var mallFlags = require("MallFlags");
 
 cc.Class({
     extends: cc.Component,
+
 //#region   PROPERTIES
     properties: () => ({
 //  MVC
@@ -90,6 +91,7 @@ cc.Class({
     }),
 //#endregion
 
+//#region life cycle
     onLoad: function() {
         NOTIFICATION.on(mallFlags.MALL_CHOOSE_VOUCHER, this.onChooseVoucher, this);
         NOTIFICATION.on(mallFlags.MALL_2_GAME, this.onMallToGame, this);
@@ -105,13 +107,9 @@ cc.Class({
         NOTIFICATION.off(mallFlags.MALL_CHOOSE_VOUCHER, this.onChooseVoucher, this);
         NOTIFICATION.off(gameFlags.GAME_2_MALL, this.onGameToMall, this);        
     },
+//#endregion
 
-    variablesInit: function() {
-        this.mallData_Purchase = {curTreasureAmount: '0', isAutoRedeem: false};
-        this.mallData_Redeem = {curTreasureAmount: '0', curVoucherPointAmount: '0', treasurePerPoint: '0'}
-    },
-
-//  interfaces switching
+//#region interfaces switching
     onGameToMall: function(event) {
         this.controllerDataUpdate();
         
@@ -125,15 +123,6 @@ cc.Class({
         }
     },
 
-    controllerDataUpdate: function() {
-        this.mallData_Purchase.curTreasureAmount = this._gameControl.curTreasure;
-        this.mallData_Purchase.isAutoRedeem = this._mallModel.isAutoRedeem;
-
-        this.mallData_Redeem.curTreasureAmount = this._gameControl.curTreasure;
-        this.mallData_Redeem.curVoucherPointAmount = this._gameControl.curVoucherPoint;
-        this.mallData_Redeem.treasurePerPoint = this._gameControl.treasurePerPoint;
-    },
-
     enterPurchaseBlock: function() {
         this.controllerDataUpdate();
         this.mallPanel_PurchaseBlock.active = true;
@@ -141,28 +130,6 @@ cc.Class({
         this._mallView.init_PurchaseBlock(this.mallData_Purchase);
     },
     
-    init_PurchaseVoucherPanel: function() {
-        if (this.voucherItemArray.length > 0) {
-            console.log("voucherContent has already been inited");
-            return;
-        }
-
-        this.content = this.scrollView.content;
-        this.voucherValuesArray = this._mallModel.voucherValuesArray;
-
-        //  spawn all the vouchers
-        for (let i = 0; i < this._mallModel.voucherValuesArray.length; i++) {
-            let item = cc.instantiate(this.voucherItem);
-            this.content.addChild(item);
-            this.voucherItemArray.push(item.getComponent("VoucherManager"));
-        }
-        
-        //  set vouchers' values
-        for (let i = 0; i < this.voucherItemArray.length; i++) {
-            this.voucherItemArray[i].setVoucherValues(i, this.voucherValuesArray[i]);
-        }
-    },
-
     enterRedeemBlock: function() {
         this.controllerDataUpdate();
         this.mallPanel_RedeemBlock.active = true;
@@ -171,12 +138,14 @@ cc.Class({
         this._mallView.init_RedeemBlock(this.mallData_Redeem);
     },
 
+    //  hit close btn in top right corner, go back to GamePlay panel
     onMallToGame: function() {
         this.mallPanel_PurchaseBlock.active = false;
         this.mallPanel_RedeemBlock.active = false;
         this._gameControl.onMallToGame();
     },
 
+    //  purchaseBlock <-> redeemBlock
     onSwitchMallBlock: function() {
         if (this.mallPanel_PurchaseBlock.active) {
             if (this._gameControl.curVoucherPoint <= 0) {
@@ -188,32 +157,32 @@ cc.Class({
             this.enterPurchaseBlock();
         }
     },
-//  interfaces switching
+//#endregion
 
-//  confirming purchase
+//#region   confirm purchasing in purchase block
+    //  when isAutoRedeem is unchecked, just add voucher point rather than current treasure
     redeemVoucherPoint: function() {
         let voucherPoint_Purchased = this.voucherItemArray[this.chosenIndex].getVoucherValues().voucherAmount;
         this.mallData_Redeem.curVoucherPointAmount += voucherPoint_Purchased;
 
         this._gameControl.updateVoucherPointOnController(this.mallData_Redeem.curVoucherPointAmount);
-        this._mallView.updateCurVoucherPointAmount(this.mallData_Redeem.curVoucherPointAmount);
-
         console.log(this.mallData_Redeem.curVoucherPointAmount);
     },
 
+    //  when isAutoRedeem is checked, all the voucherPoint that been purchased will transformed to treasure automatically,
+    //  which means you can jump over the redemmVoucherPoint() to redemmTreasure() straight forward
     redeemTreasure: function() {
-        if (!this._mallView.toggle_AutoRedeem_Purchase) {
-            return;
-        }
         let increment = this.voucherItemArray[this.chosenIndex].getVoucherValues().redeem_Treasure;
-        // this._mallView.updateTreasureAmount({increment: increment, unit: 10000});
         let curTreasure = this._gameControl.curTreasure;
         let newTreasure = curTreasure + increment * 10000;
 
-        this._mallView.updateTreasureAmount(newTreasure);
+        this.mallData_Purchase.curTreasureAmount += increment * 10000;
+        this._mallView.init_PurchaseBlock(this.mallData_Purchase);
+
+        //  call GameController to update the treasure amount which belongs to GameModel 
         NOTIFICATION.emit(gameFlags.USER_RECHARGE_TREASURE_ADD, {increment: increment * 10000});
     },
-
+    
     //  TODO
     redeemVIP: function() {
         
@@ -223,14 +192,9 @@ cc.Class({
     deductRMB: function() {
 
     },
-//  confirming pruchase
+//#endregion
 
-    resetPurchase: function() {
-        this.isPurchaseConfirming = false;
-        this.chosenIndex = 0;
-    },
-
-//  ui events
+//#region ui events
     onChooseVoucher: function(event) {
         if (this.isPurchaseConfirming === true) {
             return;
@@ -258,7 +222,7 @@ cc.Class({
 
         if (this._mallView.toggle_AutoRedeem_Purchase.isChecked) {
             console.log("autoRedeem");
-            this.redeemTreasure();  //  redeem trasure
+            this.redeemTreasure();  //  redeem treasure
         } else {
             this.redeemVoucherPoint();  //  redeem voucher point            
         }
@@ -270,11 +234,29 @@ cc.Class({
         this.resetPurchase();
     },
 
-    //  on hit cancle button
-    onCanclePurchasing: function() {
-        this.resetPurchase();
+    //  call back on hit redeem confirm button
+    onConfrimRedeem: function(){
+        let curTreasure = this._gameControl.curTreasure;
+        let inc_Treasure = this._mallModel.redeemVoucherAmount * this._gameControl.treasurePerPoint;
+
+        let curVoucherPoint = this._gameControl.curVoucherPoint;
+        let dec_VoucherPoint = this._mallModel.redeemVoucherAmount;
+
+        this.mallData_Redeem.curTreasureAmount = curTreasure + inc_Treasure;
+        this.mallData_Redeem.curVoucherPointAmount = curVoucherPoint - dec_VoucherPoint;
+        this._mallView.init_RedeemBlock(this.mallData_Redeem);
+        
+        this._gameControl.updateTreasureOnController(this.mallData_Redeem.curTreasureAmount);
+        this._gameControl.updateVoucherPointOnController(this.mallData_Redeem.curVoucherPointAmount);
     },
 
+    //  on hit cancle purchase button
+    onCanclePurchasing: function() {
+        this.resetPurchase();
+        this._mallView.deactivateConfirmPanel();        
+    },
+
+    //  on sliding
     onSliderEvent(sender, eventType) {
         let curRedeemAmount = Math.floor(this.mallData_Redeem.curVoucherPointAmount * sender.progress);
         if (curRedeemAmount <= 0) {
@@ -284,18 +266,56 @@ cc.Class({
         this._mallView.updateRedeemAmount(curRedeemAmount);
     },
 
-    onConfrimRedeem: function(){
-        let curTreasure = this._gameControl.curTreasure;
-        let increment = this._mallModel.redeemVoucherAmount * this._gameControl.treasurePerPoint;
-
-        console.log(cc.js.formatStr("curTreasure: %s, redeemVoucherAmount: %s, treasurePerPoint: %s", curTreasure, this._mallModel.redeemVoucherAmount, this._gameControl.treasurePerPoint));
-        this._gameControl.updateTreasureOnController(curTreasure + increment);
-        this._gameControl.updateVoucherPointOnController(this.mallData_Redeem.curVoucherPointAmount - this._mallModel.redeemVoucherAmount);
-        this._mallView.updateTreasureAmount(curTreasure + increment);
-    },
     //  on hit exit button
     onExit: function() {
         NOTIFICATION.emit(mallFlags.MALL_2_GAME);
     },
-//  ui events
+//#endregion
+
+//#region  others
+    //  init the custom structs to prevent from undefined
+    variablesInit: function() {
+        this.mallData_Purchase = {curTreasureAmount: '0', isAutoRedeem: false};
+        this.mallData_Redeem = {curTreasureAmount: '0', curVoucherPointAmount: '0', treasurePerPoint: '0'}
+    },
+
+    //  update values of 2 custom structs, which will be sent to purchase block and redeem block
+    controllerDataUpdate: function() {
+        this.mallData_Purchase.curTreasureAmount = this._gameControl.curTreasure;
+        this.mallData_Purchase.isAutoRedeem = this._mallModel.isAutoRedeem;
+
+        this.mallData_Redeem.curTreasureAmount = this._gameControl.curTreasure;
+        this.mallData_Redeem.curVoucherPointAmount = this._gameControl.curVoucherPoint;
+        this.mallData_Redeem.treasurePerPoint = this._gameControl.treasurePerPoint;
+    },
+
+    //  init the scroll view, which is the containter of all voucher items
+    init_PurchaseVoucherPanel: function() {
+        if (this.voucherItemArray.length > 0) {
+            console.log("voucherContent has already been inited");
+            return;
+        }
+
+        this.content = this.scrollView.content;
+        this.voucherValuesArray = this._mallModel.voucherValuesArray;
+
+        //  spawn all the vouchers
+        for (let i = 0; i < this._mallModel.voucherValuesArray.length; i++) {
+            let item = cc.instantiate(this.voucherItem);
+            this.content.addChild(item);
+            this.voucherItemArray.push(item.getComponent("VoucherManager"));
+        }
+        
+        //  set vouchers' values
+        for (let i = 0; i < this.voucherItemArray.length; i++) {
+            this.voucherItemArray[i].setVoucherValues(i, this.voucherValuesArray[i]);
+        }
+    },
+
+    //  reset purchase after a purchasing operation(confirmed or cancled)
+    resetPurchase: function() {
+        this.isPurchaseConfirming = false;
+        this.chosenIndex = 0;
+    },
+//#endregion
 });

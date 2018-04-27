@@ -5,7 +5,9 @@ cc.Class({
     editor: {
         executionOrder: -1
     },
+//#region  Properties
     properties: () => ({
+        //#region  mvc
         _gameModel: {
             default: null,
             type: require("GameModel"),
@@ -23,6 +25,7 @@ cc.Class({
             type: require("MallController"),
             visible: true
         },
+        //#endregion
 
         //  Interface nodes
         gamePanelBlock: {
@@ -30,7 +33,7 @@ cc.Class({
             type: cc.Node
         },
 
-        //  Data reference
+        //#region Data reference
         curVoucherPoint: {
             get: function() {return this._curVoucherPoint;},
             visible: false
@@ -55,6 +58,7 @@ cc.Class({
             get: function() {return this._treasurePerPoint;},
             visible: false
         },
+        //#endregion
 
         //  Flags
         isPlaying: {
@@ -62,7 +66,9 @@ cc.Class({
             visible: false
         },
     }),
+    //#endregion
 
+//#region  life cycle
     onLoad: function() {
         this.eventsRegistration();
         this.initValuesOnController();
@@ -76,15 +82,9 @@ cc.Class({
     onDisable: function() {
         this.eventsDeRegistration();
     },
+//#endregion
 
-    initValuesOnController: function() {
-        this.updateVoucherPointOnController(this._gameModel.curVoucherPoint);
-        this.updateTreasureOnController(this._gameModel.curTreasure);
-        this.updateMagOnController(this._gameModel.curMag);
-        this.updateMagIntervalOnController(this._gameModel.magInterval);
-        this.updateTreasurePerPointOnController(this._gameModel.treasurePerPoint);
-    },
-
+//#region  events
     eventsRegistration: function() {
         NOTIFICATION.on(flags.GAME_HIT_MAIN, this.onHitMainButton, this);
         NOTIFICATION.on(flags.MAG_ADD, this.onMagAdded, this);
@@ -112,7 +112,9 @@ cc.Class({
 
         NOTIFICATION.off(flags.GAME_2_MALL, this.onGameToMall, this);                
     },
+//#endregion
 
+//#region  interfaces switching
     onGameToMall: function() {
         if (this.isPlaying === true) {
             this.isPlaying = false;
@@ -128,6 +130,7 @@ cc.Class({
         this.updateValuesOnModel();
         this.updateValuesOnView();
     },
+//#endregion
 
 //#region  game play, game pause
     onHitMainButton: function() {
@@ -269,6 +272,16 @@ cc.Class({
     },
     updateMagOnController: function(tarMagValue) {this._curMag = tarMagValue;},
     updateMagIntervalOnController: function(tarMagInterval) {this._magInterval = tarMagInterval;},
-    updateTreasurePerPointOnController: function(tarTreasurePerPoint) {this._treasurePerPoint = tarTreasurePerPoint;}
+    updateTreasurePerPointOnController: function(tarTreasurePerPoint) {this._treasurePerPoint = tarTreasurePerPoint;},
+//#endregion
+
+//#region  others
+    initValuesOnController: function() {
+        this.updateVoucherPointOnController(this._gameModel.curVoucherPoint);
+        this.updateTreasureOnController(this._gameModel.curTreasure);
+        this.updateMagOnController(this._gameModel.curMag);
+        this.updateMagIntervalOnController(this._gameModel.magInterval);
+        this.updateTreasurePerPointOnController(this._gameModel.treasurePerPoint);
+    },
 //#endregion
 });

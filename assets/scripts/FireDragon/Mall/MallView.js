@@ -68,29 +68,30 @@ cc.Class({
         }
     },
 
+    //  init/update UI content in purchase block
     init_PurchaseBlock: function(initValueSet) {
         let curTreasureAmount = initValueSet.curTreasureAmount;
         let isAutoRedeem = initValueSet.isAutoRedeem;
-        
+
+        console.log(cc.js.formatStr("curTreasureAmount: %s, isAutoRedeem: %s", curTreasureAmount));
         this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace(
             this.hasInited_Purchase ? this.curTreasureAmount : 'value', curTreasureAmount
         );
 
-        this.toggle_AutoRedeem_Purchase.isChecked = isAutoRedeem;
+        this.toggle_AutoRedeem_Purchase.isChecked = this.hasInited_Purchase ? this.toggle_AutoRedeem_Purchase.isChecked : isAutoRedeem;
         this.curTreasureAmount = curTreasureAmount;
 
         this.hasInited_Purchase = true;
     },
 
+    //  init/update UI content in redeem block
     init_RedeemBlock: function(initValueSet) {
         let curTreasureAmount = initValueSet.curTreasureAmount;
         let curVoucherPointAmount = initValueSet.curVoucherPointAmount;
         let treasurePerPoint = initValueSet.treasurePerPoint;
         let cashableTreasure = curVoucherPointAmount * treasurePerPoint;
-        console.log("cashableTreasure: " + cashableTreasure);
 
         this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.hasInited_Redeem ? this.curTreasureAmount :'value', curTreasureAmount);
-        // this.label_RedeemedAmount.string = this.label_RedeemedAmount.string.replace('value', curVoucherPointAmount);
         this.label_RedeemedAmount.string = curVoucherPointAmount;
         
         this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.hasInited_Redeem ? this.curVoucherPointAmount : 'value', curVoucherPointAmount);
@@ -107,50 +108,38 @@ cc.Class({
         this.hasInited_Redeem = true;        
     },
 
+    //  hint panel when user has no voucher point
     activateLackOfVoucherPanel: function() {
         if (this.lackOfVoucherPanel.active === false) {
             this.lackOfVoucherPanel.active = true;
         }
     },
 
+    //  close the lackOfVoucher hint panel
     deactivateLackOfVoucherPanel: function() {
         if (this.lackOfVoucherPanel.active === true) {
             this.lackOfVoucherPanel.active = false;
         }
     },
 
+    //  open the confirm panel of voucher purchasing
     activateConfirmPanel: function() {
         if (this.confirmingPanle.active === false) {
             this.confirmingPanle.active = true;
         }
     },
 
+    //  close the confirm panel of voucher purchasing
     deactivateConfirmPanel: function() {
         if (this.confirmingPanle.active === true) {
             this.confirmingPanle.active = false;
         }
     },
-    
-    updateCurVoucherPointAmount: function(tarVoucherPointAmount) {
-        // this.label_RedeemedAmount.string = this.label_RedeemedAmount.string.replace(this.curVoucherPointAmount, tarVoucherPointAmount);
-        this.label_RedeemedAmount.string = tarVoucherPointAmount;        
-        this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.curVoucherPointAmount, tarVoucherPointAmount);
-        
-        this.curVoucherPointAmount = tarVoucherPointAmount;
-    },
 
-    //#region   for slider
+    //#region   for slider: update redeemed amount and slider length on user sliding
     updateRedeemAmount: function(tarRedeemAmount) {
         this.label_RedeemedAmount.string = tarRedeemAmount;
         this.label_CashableTreasure_Redeem.string = tarRedeemAmount * this.treasurePerPoint;
     },
     //#endregion
-
-    updateTreasureAmount: function(tarTreasureAmount) {
-        console.log("tarTreasureAmount" + tarTreasureAmount);
-        this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.curTreasureAmount, tarTreasureAmount);
-        this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace(this.curTreasureAmount, tarTreasureAmount);
-        
-        this.curTreasureAmount = tarTreasureAmount;
-    }
 });
