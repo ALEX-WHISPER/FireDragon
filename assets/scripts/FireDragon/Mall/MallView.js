@@ -73,14 +73,10 @@ cc.Class({
         let curTreasureAmount = initValueSet.curTreasureAmount;
         let isAutoRedeem = initValueSet.isAutoRedeem;
 
-        console.log(cc.js.formatStr("curTreasureAmount: %s, isAutoRedeem: %s", curTreasureAmount));
-        this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace(
-            this.hasInited_Purchase ? this.curTreasureAmount : 'value', curTreasureAmount
-        );
-
+        this.label_CurTreasure_Purchase.string = curTreasureAmount;
         this.toggle_AutoRedeem_Purchase.isChecked = this.hasInited_Purchase ? this.toggle_AutoRedeem_Purchase.isChecked : isAutoRedeem;
+        
         this.curTreasureAmount = curTreasureAmount;
-
         this.hasInited_Purchase = true;
     },
 

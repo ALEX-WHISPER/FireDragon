@@ -131,15 +131,27 @@ cc.Class({
     },
 
     setNewTreasure: function(newTreasure) {
-        this._curTreasure = newTreasure;
+        if (this.curTreasure != newTreasure) {
+            this._curTreasure = newTreasure;
+            console.log("update treasure: " + newTreasure);            
+        }
     },
 
     setNewMag: function(newMag) {
-        this._curMag = newMag;
+        if(this.curMag != newMag)
+            this._curMag = newMag;
     },
 
     setNewMagInterval: function(newMagInterval) {
-        this._magInterval = newMagInterval;
+        if(this.magInterval != newMagInterval)    
+            this._magInterval = newMagInterval;
+    },
+
+    setNewVoucherPoint: function(newVoucherPoint) {
+        if(this.curVoucherPoint != newVoucherPoint) {
+            this._curVoucherPoint = newVoucherPoint;
+            console.log("update voucher point: " + newVoucherPoint);            
+        }
     },
 
     selection_sort: function() {

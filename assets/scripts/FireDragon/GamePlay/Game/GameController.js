@@ -252,6 +252,7 @@ cc.Class({
         this._gameModel.setNewMagInterval(this.magInterval);
         this._gameModel.setNewMag(this.curMag);
         this._gameModel.setNewTreasure(this.curTreasure);
+        this._gameModel.setNewVoucherPoint(this.curVoucherPoint);
     },
 
     updateValuesOnView: function() {
