@@ -42,6 +42,11 @@ cc.Class({
             type:cc.Label
         },
 
+        label_CashableTreasure_Redeem: {
+            default: null,
+            type: cc.Label
+        },
+
         label_Rule: {
             default: null,
             type: cc.Label
@@ -67,7 +72,10 @@ cc.Class({
         let curTreasureAmount = initValueSet.curTreasureAmount;
         let isAutoRedeem = initValueSet.isAutoRedeem;
         
-        this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace(this.hasInited_Purchase ? this.curTreasureAmount : 'value', curTreasureAmount);
+        this.label_CurTreasure_Purchase.string = this.label_CurTreasure_Purchase.string.replace(
+            this.hasInited_Purchase ? this.curTreasureAmount : 'value', curTreasureAmount
+        );
+
         this.toggle_AutoRedeem_Purchase.isChecked = isAutoRedeem;
         this.curTreasureAmount = curTreasureAmount;
 
@@ -78,6 +86,8 @@ cc.Class({
         let curTreasureAmount = initValueSet.curTreasureAmount;
         let curVoucherPointAmount = initValueSet.curVoucherPointAmount;
         let treasurePerPoint = initValueSet.treasurePerPoint;
+        let cashableTreasure = curVoucherPointAmount * treasurePerPoint;
+        console.log("cashableTreasure: " + cashableTreasure);
 
         this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.hasInited_Redeem ? this.curTreasureAmount :'value', curTreasureAmount);
         // this.label_RedeemedAmount.string = this.label_RedeemedAmount.string.replace('value', curVoucherPointAmount);
@@ -85,12 +95,14 @@ cc.Class({
         
         this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.hasInited_Redeem ? this.curVoucherPointAmount : 'value', curVoucherPointAmount);
         this.label_Rule.string = this.label_Rule.string.replace(this.hasInited_Redeem ? this.treasurePerPoint : 'value', treasurePerPoint);
+        this.label_CashableTreasure_Redeem.string = cashableTreasure;
         this.slider_ChooseRedeemAmount.progress = 1;
 
         this.curTreasureAmount = curTreasureAmount;
         this.curVoucherPointAmount = curVoucherPointAmount;
         this.redeemAmount = curVoucherPointAmount;
         this.treasurePerPoint = treasurePerPoint;
+        this.cashableTreasure = cashableTreasure;
         
         this.hasInited_Redeem = true;        
     },
@@ -130,6 +142,7 @@ cc.Class({
     //#region   for slider
     updateRedeemAmount: function(tarRedeemAmount) {
         this.label_RedeemedAmount.string = tarRedeemAmount;
+        this.label_CashableTreasure_Redeem.string = tarRedeemAmount * this.treasurePerPoint;
     },
     //#endregion
 

@@ -97,6 +97,10 @@ cc.Class({
         this.variablesInit();
     },
 
+    start: function() {
+        this.init_PurchaseVoucherPanel();        
+    },
+
     onDisable: function() {
         NOTIFICATION.off(mallFlags.MALL_CHOOSE_VOUCHER, this.onChooseVoucher, this);
         NOTIFICATION.off(gameFlags.GAME_2_MALL, this.onGameToMall, this);        
@@ -109,7 +113,7 @@ cc.Class({
 
 //  interfaces switching
     onGameToMall: function(event) {
-        this.init();
+        this.controllerDataUpdate();
         
         if (event.voucherPoint > 0) {
             this.enterRedeemBlock();
@@ -121,7 +125,7 @@ cc.Class({
         }
     },
 
-    init: function() {
+    controllerDataUpdate: function() {
         this.mallData_Purchase.curTreasureAmount = this._gameControl.curTreasure;
         this.mallData_Purchase.isAutoRedeem = this._mallModel.isAutoRedeem;
 
@@ -131,10 +135,9 @@ cc.Class({
     },
 
     enterPurchaseBlock: function() {
-        this.init();
+        this.controllerDataUpdate();
         this.mallPanel_PurchaseBlock.active = true;
         this.mallPanel_RedeemBlock.active = false;
-        this.init_PurchaseVoucherPanel();
         this._mallView.init_PurchaseBlock(this.mallData_Purchase);
     },
     
@@ -161,7 +164,7 @@ cc.Class({
     },
 
     enterRedeemBlock: function() {
-        this.init();
+        this.controllerDataUpdate();
         this.mallPanel_RedeemBlock.active = true;
         this.mallPanel_PurchaseBlock.active = false;
         this._mallModel.init_RedeemBlock(this.mallData_Redeem);

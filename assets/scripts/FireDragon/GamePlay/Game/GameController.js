@@ -219,13 +219,14 @@ cc.Class({
         this.check_MagInterval();
         
         if (this.curMag === 1) {
-            this.updateMagOnController(1000);
-            this.updateMagIntervalOnController(100);
-        } else {
-            this.updateMagOnController(this.curMag - this.magInterval);
-            if (this.curMag === 0) {
-                this.updateMagOnController(1);
-            }
+            this.updateMagIntervalOnController(0);
+        } else if (this.curMag === 100) {
+            this.updateMagIntervalOnController(10);
+        }
+
+        this.updateMagOnController(this.curMag - this.magInterval);
+        if (this.curMag === 0) {
+            this.updateMagOnController(1);
         }
 
         this.updateValuesOnModel();

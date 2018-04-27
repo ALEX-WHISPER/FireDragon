@@ -6,10 +6,6 @@ cc.Class({
         nickName_EnterRoom: cc.Node
     },
 
-    onLoad: function() {
-        this.getUserInfo();
-    },
-
     getUserInfo: function() {
         var self = this;
 

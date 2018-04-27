@@ -16,6 +16,14 @@ cc.Class({
 
     setGameInfo: function() {
         let label_curTreasure = this.curTreature_EnterRoom.getComponent(cc.Label);
-        label_curTreasure.string = label_curTreasure.string.replace('value', this._gameModel.curTreasure);
+        
+        label_curTreasure.string = label_curTreasure.string.replace(
+            this.hasInited ? this.curTreasure : 'value', 
+            this._gameModel.curTreasure
+        );
+        
+        this.curTreasure = this._gameModel.curTreasure;
+        console.log("curTreature in GameInfoDisplay: " + this.curTreasure);
+        this.hasInited = true;
     }
 });

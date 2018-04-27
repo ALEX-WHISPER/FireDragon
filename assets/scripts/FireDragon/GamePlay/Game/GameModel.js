@@ -36,6 +36,16 @@ cc.Class({
             get: function() {return this._treasurePerPoint;},
             visible: false
         },
+
+        QP_ID: {
+            get: function() {return this._QP_ID;},
+            visible: false
+        },
+
+        bindingAccount: {
+            get: function() {return this._bindingAccount;},
+            visible: false
+        },
         //#endregion
         
         enemies: {
@@ -159,5 +169,7 @@ cc.Class({
         this._curMag = 1;
         this._magInterval = 1;
         this._treasurePerPoint = 2000;
+        this._QP_ID = '233333333';
+        this._bindingAccount = '00544-44944'
     }
 });

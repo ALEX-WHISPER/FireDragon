@@ -26,7 +26,7 @@ cc.Class({
         label_CostRMB:cc.Label,
 
         gamePlayPanel: cc.Node,
-        enterRoomPanel: cc.Node,
+        enterRoomBlock: cc.Node,
         lackOfTreasurePanel: cc.Node
     }),
 
@@ -93,7 +93,7 @@ cc.Class({
 
     //  allow to enter room
     onEnterRoom: function() {
-        this.enterRoomPanel.active = false;
+        this.enterRoomBlock.active = false;
         this.lackOfTreasurePanel.active = false;
 
         this.gamePlayPanel.active = true;
@@ -108,7 +108,16 @@ cc.Class({
         this._gameControl.updateTreasureOnController(newTreasure);
         this._gameControl.updateValuesOnModel();
         this._gameControl.updateValuesOnView();
+        
+        //  update game info in this panel
+        this.node.getComponent("GameInfoDisplay").setGameInfo();
 
         this.onExitRechargeEntry();
+    },
+
+    onEnterUserCenter: function() {
+        let userCenterBlock = cc.find('Canvas/UserCenterBlock');
+        userCenterBlock.active = true;
+        this.node.parent.active = false;
     }
 });
