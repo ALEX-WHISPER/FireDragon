@@ -1,0 +1,18 @@
+
+module.exports = {
+    GAME_HIT_MAIN: 'Game_Hit_Main',
+    
+    MAG_ADD: 'Mag_ADD',
+    MAG_MINUS: 'Mag_Minus',
+
+    ENEMY_CATCH_ATTEMPT: 'Enemy_CatchAttempt',
+    ENEMY_GET_CAUGHT: 'Enemy_GetCaught',
+    ENEMY_GET_ESCAPED: 'Enemy_GetEscaped',
+
+    ENEMY_CAUGHT_TREASURE_ADD: 'Enemy_Caught_Treasure_Add',
+    ENEMY_ESCAPED_TREASURE_MINUS: 'Enemy_Escaped_Treasure_Minus',
+
+    USER_RECHARGE_TREASURE_ADD: 'User_Recharge_Treasure_Add',
+
+    GAME_2_MALL: 'GameToMall',
+};

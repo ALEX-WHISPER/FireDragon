@@ -1,0 +1,179 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/GamePlay/Game/GameView.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '95832xA+JRA06IoXiV+/K2J', 'GameView', __filename);
+// scripts/FireDragon/GamePlay/Game/GameView.js
+
+"use strict";
+
+var Flags = require("GameFlags");
+var catchingMsgItemPool = require("CatchingMsgItemPool");
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        scrollView: {
+            default: null,
+            type: cc.ScrollView
+        },
+
+        scrollItemTotalCount: 0,
+        scrollItemMaxCount: 30,
+
+        catchingMinusInfo: {
+            default: null,
+            type: cc.Node
+        },
+
+        msgItemPoolController: {
+            default: null,
+            type: catchingMsgItemPool
+        },
+
+        itemTemplate: { // item template to instantiate other items
+            default: null,
+            type: cc.Prefab
+        },
+
+        lable_CurTreasureCount: {
+            default: null,
+            type: cc.Label
+        },
+
+        lable_MagnificationCount: {
+            default: null,
+            type: cc.Label
+        },
+
+        playButton: {
+            default: null,
+            type: cc.Button
+        },
+
+        startPlayLabelStr: '',
+        continueLabelStr: '',
+        pauseLabelStr: ''
+    },
+
+    onLoad: function onLoad() {
+        this.content = this.scrollView.content;
+        this.items = []; // array to store spawned items
+        this.labelChanged_PlayButton(-1);
+    },
+
+    start: function start() {
+        if (!this.catchingMinusInfo.active) {
+            this.catchingMinusInfo.active = true;
+            this.catchingMinusInfo.opacity = 0;
+        }
+    },
+
+    //  update current treasure count
+    setNewTreasure: function setNewTreasure(newTreasure) {
+        this.lable_CurTreasureCount.string = newTreasure;
+    },
+
+    //  update current magnification count
+    setNewMag: function setNewMag(newMag) {
+        if (newMag != this.lable_MagnificationCount.string) {
+            this.lable_MagnificationCount.string = newMag;
+        }
+    },
+
+    //  pop out catching-minus floating box
+    setCatchingMinusInfo: function setCatchingMinusInfo(curMagValue) {
+        this.catchingMinusInfo.opacity = 255;
+        this.catchingMinusInfo.runAction(cc.fadeOut(1));
+        this.catchingMinusInfo.getChildByName("minusCount").getComponent(cc.Label).string = "-" + curMagValue.toString();
+    },
+
+    //  update the button sprite frames: play -> pause
+    onHitPlayButton: function onHitPlayButton() {
+        // this.spriteChanged_PlayButton(this.playButtonSprites);        
+        this.labelChanged_PlayButton(0);
+    },
+
+    //  update the button sprite frames: pause -> play 
+    onHitPauseButton: function onHitPauseButton() {
+        // this.spriteChanged_PlayButton(this.playButtonSprites);
+        this.labelChanged_PlayButton(1);
+    },
+
+    spriteChanged_PlayButton: function spriteChanged_PlayButton(spritesArray) {
+        this.playButton.normalSprite = spritesArray[0];
+        this.playButton.pressedSprite = spritesArray[1];
+        this.playButton.hoverSprite = spritesArray[2];
+        this.playButton.disabledSprite = spritesArray[3];
+    },
+
+    labelChanged_PlayButton: function labelChanged_PlayButton(tarStats) {
+        //  on start
+        if (tarStats === -1) {
+            this.playButton.node.getChildByName('Label').getComponent(cc.Label).string = this.startPlayLabelStr;
+        }
+
+        //  on pause
+        if (tarStats === 0) {
+            this.playButton.node.getChildByName('Label').getComponent(cc.Label).string = this.pauseLabelStr;
+        }
+
+        //  on continue
+        if (tarStats === 1) {
+            this.playButton.node.getChildByName('Label').getComponent(cc.Label).string = this.continueLabelStr;
+        }
+    },
+
+    //  add catching result item to scrollView
+    onScrollViewVicItemAdded: function onScrollViewVicItemAdded(msg) {
+        if (this.scrollItemTotalCount >= this.msgItemPoolController.maxCount) {
+            var first = this.items.shift();
+            this.scrollItemTotalCount--;
+            this.content.removeChild(first);
+
+            this.msgItemPoolController.itemPool.put(first); //  put the item been removed to object pool for reusing
+        }
+
+        var item = null;
+        if (this.msgItemPoolController.itemPool.size() > 0) {
+            item = this.msgItemPoolController.itemPool.get();
+            console.log("get available item from itemPool");
+        } else {
+            console.log("no available item in itemPool!!!");
+            return;
+        }
+        this.content.addChild(item);
+        this.items.push(item);
+
+        this.content.height = (this.scrollItemTotalCount + 1) * item.height + item.height;
+        this.scrollItemTotalCount++;
+
+        item.getChildByName("enemyImg").getComponent(cc.Sprite).spriteFrame = msg.enemyImg;
+        item.getChildByName("attackObj").getComponent(cc.Label).string = msg.attackObj;
+        item.getChildByName("result").getComponent(cc.Label).string = msg.result;
+
+        console.log("attackObj: " + msg.attackObj + ", result: " + msg.result + ", itemCount: " + this.items.length);
+    },
+
+    //  when treasure is running out
+    onRunningOutofTreasure: function onRunningOutofTreasure() {
+        this.spriteChanged_PlayButton(this.playButtonSprites);
+        this.playButton.interactable = false;
+    },
+
+    onResumeEnoughTreasure: function onResumeEnoughTreasure() {
+        this.playButton.interactable = true;
+    }
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=GameView.js.map
+        

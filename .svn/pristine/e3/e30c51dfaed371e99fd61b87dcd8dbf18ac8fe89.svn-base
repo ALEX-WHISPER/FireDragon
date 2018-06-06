@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_yaoqingk",
+    "texture": "14057fc8-3c77-439b-abe2-b697e826299a",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      635,
+      810
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      635,
+      810
+    ]
+  }
+}

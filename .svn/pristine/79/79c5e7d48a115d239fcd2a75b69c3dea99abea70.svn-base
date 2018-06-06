@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_gou",
+    "texture": "8871ceab-aed1-4e82-9d96-3bf3a88b69f5",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      36,
+      28
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      36,
+      28
+    ]
+  }
+}

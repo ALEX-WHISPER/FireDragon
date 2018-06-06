@@ -1,0 +1,19 @@
+"use strict";
+cc._RF.push(module, '28682P+lOxNiJf4gkrbNvLg', 'Enemy_NonMulti');
+// scripts/FireDragon/Enemies/Enemy_NonMulti.js
+
+"use strict";
+
+var enemyBase = require("EnemyBase");
+
+cc.Class({
+    extends: enemyBase,
+
+    properties: {},
+
+    onGetCatched: function onGetCatched() {
+        enemyBase.prototype.onGetCatched.call(this);
+    }
+});
+
+cc._RF.pop();

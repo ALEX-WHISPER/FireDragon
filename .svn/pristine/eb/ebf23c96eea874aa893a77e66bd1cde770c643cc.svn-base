@@ -1,0 +1,291 @@
+var enemyBase = require("EnemyBase");
+var flags = require("GameFlags");
+
+var magRangeStruct = cc.Class({
+    name: 'magRangeStruct',
+    properties: {
+        max: 0, min: 0
+    }
+});
+
+var treasureRangeStruct = cc.Class({
+    name: 'treasureRangeStruct',
+    properties: {
+        max: 0, min: 0
+    }
+});
+
+cc.Class({
+    extends: cc.Component,
+
+    editor: {
+        executionOrder: -2
+    },
+
+    properties: () => ({
+        //  捕获间隔
+        catchActionInterval: 2,
+        
+        //#region rules
+
+        //  每个房间的金币准入值范围
+        treasureRangeArrayForEveryRoom: {
+            default: [],
+            type: treasureRangeStruct
+        },
+
+        //  每个房间的倍率范围值
+        magRangeArrayForEvenryRoom: {
+            default: [],
+            type: magRangeStruct
+        },
+        //#endregion
+        
+        //#region Data
+
+        //  当前房间类型下标
+        curRoomIndex: {
+            get: function() {return this._curRoomIndex;},
+            visible: false
+        },
+
+        //  当前点券数
+        curVoucherPoint: {
+            get: function() {return this._curVoucherPoint;},
+            visible: false
+        },
+
+        //  当前金币数
+        curTreasure: {
+            get: function() { return this._curTreasure;},
+            visible: false
+        },
+
+        //  当前房间金币范围
+        curTreasureRange: {
+            get: function() {
+                console.log("curTreasureRange: " + this.treasureRangeArrayForEveryRoom[this.roomIndex]);
+                return this.treasureRangeArrayForEveryRoom[this.curRoomIndex];
+            },
+            type: treasureRangeStruct,
+            visible: false
+        },
+
+        //  当前倍率
+        curMag: {
+            get: function() {return this._curMag;},
+            visible: false
+        },
+
+        //  倍率间隔
+        magInterval: {
+            get: function() {return this._magInterval;},
+            visible: false
+        },
+
+        //  倍率范围
+        curMagRange: {
+            get: function() {return this.magRangeArrayForEvenryRoom[this.curRoomIndex];},
+            type: magRangeStruct,
+            visible: false
+        },
+
+        //  每张点券兑换多少金币
+        treasurePerPoint: {
+            get: function() {return this._treasurePerPoint;},
+            visible: false
+        },
+
+        //  捕获怪物数量
+        curCaughtCount: {
+            get: function() {return this._curCaughtCount;},
+            visible: false
+        },
+
+        //  亲朋id
+        QP_ID: {
+            get: function() {return this._QP_ID;},
+            visible: false
+        },
+
+        bindingAccount: {
+            get: function() {return this._bindingAccount;},
+            visible: false
+        },
+        //#endregion
+        
+        enemies: {
+            default: [],
+            type: [enemyBase]
+        },
+
+        curEnemyIndex: {
+            default: 0,
+            visible: false
+        },
+
+        totalCardinal: {
+            default: 0,
+            visible: false
+        },
+    }),
+
+    onLoad: function() {
+        this.gameValuesInit();
+    },
+
+    start: function() {
+        this.selection_sort();  //  after sorting, the enemy array has been sorted ascendingly basic on cardinalNum
+
+        for(let i = 0; i < this.enemies.length; i++) {
+            console.log(this.enemies[i].enemyName + ": " + this.enemies[i].cardinalNum);
+        }
+
+        //  计算所有怪物的数量和，以此确定每个怪物的生成概率
+        for (let i = 0; i < this.enemies.length; i++) {
+            this.totalCardinal += this.enemies[i].cardinalNum;
+        }
+
+        //  设置各怪物的生成概率
+        for (let i = 0; i < this.enemies.length; i++) {
+            //  先根据各怪物基数占比，设置其独立概率
+            this.enemies[i].spawningRate = this.enemies[i].cardinalNum / this.totalCardinal;
+            
+            //  根据前一个怪物的生成概率，设置连续概率值，即随机到该怪物的随机数最大值
+            if (i > 0) this.enemies[i].spawningRate += this.enemies[i - 1].spawningRate;
+            console.log(this.enemies[i].enemyName + "'s spawningRange: " + this.enemies[i].spawningRate);
+        }
+    },
+
+    //  根据房间下标获取该房间的金币准入范围
+    getCurTreasureRange: function(roomIndex) {
+        return this.treasureRangeArrayForEveryRoom[roomIndex];
+    },
+
+    //#region game play
+    //  开始狩猎
+    startHangingUp: function() {
+        this.schedule(this.onStartSpawning, this.catchActionInterval);
+    },
+
+    //  暂停
+    pauseHangingUp: function() {
+        this.unschedule(this.onStartSpawning, this);
+    },
+
+    //  开始生成敌人
+    onStartSpawning: function() {
+        this.enemySpawner();    //  生成怪物
+        this.enemyCatcher();    //  尝试捕获
+    },
+
+    //  生成敌人
+    enemySpawner: function() {
+        let calcSpawningRate = cc.random0To1();
+        //  由于敌人已按照基数从小到大排列完毕，所以循环将优先遍历基数较小的
+        //  当遍历到某一敌人时，说明前一个概率更小的敌人已被遍历且结果并未落到该区间内
+        for(let i = 0; i < this.enemies.length; i++) {
+            if (calcSpawningRate <= this.enemies[i].spawningRate) {
+                this.curEnemyIndex = i;
+                break;
+            }
+        }
+        // this.curEnemyIndex = Math.floor(Math.random() * this.enemies.length);
+        console.log("CalcSpawningNum: " + calcSpawningRate + ", spawned enemy: " + this.enemies[this.curEnemyIndex].enemyName);
+    },
+
+    //  尝试捕获
+    enemyCatcher: function() {
+        //  randomize a num as the catching rate
+        var calcCatchingRate = Math.random();
+        var enemyCatchingRate = this.enemies[this.curEnemyIndex].catchingRate;
+        console.log("CalcCatchingRate: " + calcCatchingRate + ", RealCatchingRate: " + enemyCatchingRate);
+
+        if (calcCatchingRate <= enemyCatchingRate) {
+            //  enemy get caught
+            NOTIFICATION.emit(flags.ENEMY_GET_CAUGHT, {msg: this.enemies[this.curEnemyIndex].enemyName});
+        } else {
+            //  enemy get escaped
+            NOTIFICATION.emit(flags.ENEMY_GET_ESCAPED, {msg: this.enemies[this.curEnemyIndex].enemyName});
+        }
+
+        NOTIFICATION.emit(flags.ENEMY_CATCH_ATTEMPT, {msg: this.enemies[this.curEnemyIndex].enemyName});
+    },
+    //#endregion
+
+    //#region update values
+    //  进入房间的下标值
+    setEnteredRoomIndex: function(roomIndex) {
+        this._curRoomIndex = roomIndex;
+        console.log("ENTER ROOM: " + this.curRoomIndex);
+    },
+
+    //  更新金币值
+    setNewTreasure: function(newTreasure) {
+        if (this.curTreasure != newTreasure) {
+            this._curTreasure = newTreasure;
+            // console.log("update treasure: " + newTreasure);            
+        }
+    },
+
+    //  更新捕获数量
+    setNewCaughtCount: function(newCaughtCount) {
+        if (this.curCaughtCount != newCaughtCount) {
+            this._curCaughtCount = newCaughtCount;
+        }
+    },
+
+    //  更新倍率值
+    setNewMag: function(newMag) {
+        if(this.curMag != newMag)
+            this._curMag = newMag;
+    },
+
+    //  更新倍率间隔值
+    setNewMagInterval: function(newMagInterval) {
+        if(this.magInterval != newMagInterval)    
+            this._magInterval = newMagInterval;
+    },
+
+    //  更新点券数
+    setNewVoucherPoint: function(newVoucherPoint) {
+        if(this.curVoucherPoint != newVoucherPoint) {
+            this._curVoucherPoint = newVoucherPoint;
+            console.log("update voucher point: " + newVoucherPoint);            
+        }
+    },
+    //#endregion
+
+    //  选择排序，将敌人列表以基数从小到大排列
+    selection_sort: function() {
+        for (let i = 0; i < this.enemies.length; i++) {
+            let minCardinal = this.enemies[i].cardinalNum;
+            let minIndex = i;
+
+            for (let j = i; j < this.enemies.length; j++) {
+                if (this.enemies[j].cardinalNum < minCardinal) {
+                    minCardinal = this.enemies[j].cardinalNum;
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i) {
+                let temp = this.enemies[minIndex];
+                this.enemies[minIndex] = this.enemies[i];
+                this.enemies[i] = temp;
+            }
+        }
+    },
+
+    //  本地数值模拟初始化
+    gameValuesInit: function() {
+        this._curVoucherPoint = 50; //  当前点券数
+        this._curTreasure = 999;    //  当前金币数
+        this._curCaughtCount = 0;   //  当前捕获数
+        this._curMag = 1;       //  当前倍率
+        this._magInterval = 1;  //  倍率间隔
+        this._treasurePerPoint = 2000;  //  1点券兑换的金币数
+        this._QP_ID = '233333333';      //  亲朋id
+        this._bindingAccount = '00544-44944'
+    }
+});

@@ -1,0 +1,44 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/GamePlay/Enemies/EnemyBase.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '58209WJQMdNQaHaUc2I4NhK', 'EnemyBase', __filename);
+// scripts/FireDragon/GamePlay/Enemies/EnemyBase.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        enemyName: '',
+        cardinalNum: 0,
+        enemyImg: cc.SpriteFrame,
+        spawningRate: {
+            visible: false,
+
+            get: function get() {
+                return this._spawningRate;
+            },
+
+            set: function set(value) {
+                this._spawningRate = value;
+            }
+        },
+
+        killMsg: '金币: + '
+    },
+
+    onGetCatched: function onGetCatched() {}
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=EnemyBase.js.map
+        

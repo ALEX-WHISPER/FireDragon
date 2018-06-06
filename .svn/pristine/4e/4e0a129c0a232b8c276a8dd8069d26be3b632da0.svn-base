@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_hongbaok",
+    "texture": "b12a92e7-facb-4460-a29f-1639e3bc2b17",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      58,
+      93
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      58,
+      93
+    ]
+  }
+}

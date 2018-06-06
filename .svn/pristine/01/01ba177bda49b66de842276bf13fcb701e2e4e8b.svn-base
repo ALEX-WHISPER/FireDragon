@@ -1,0 +1,53 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/GamePlay/ObjectPools/CatchingMsgItemPool.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, 'cd591li0SxPM6TKzSm+YHRS', 'CatchingMsgItemPool', __filename);
+// scripts/FireDragon/GamePlay/ObjectPools/CatchingMsgItemPool.js
+
+"use strict";
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        itemTemplate: cc.Prefab,
+        maxCount: 30,
+
+        itemPool: {
+            get: function get() {
+                return this._itemPool;
+            },
+
+            set: function set(value) {
+                this._itemPool = value;
+            },
+
+            visible: false
+        }
+    },
+
+    onLoad: function onLoad() {
+        this.poolInit();
+    },
+
+    poolInit: function poolInit() {
+        this.itemPool = new cc.NodePool();
+
+        for (var i = 0; i < this.maxCount; i++) {
+            var item = cc.instantiate(this.itemTemplate);
+            this.itemPool.put(item);
+        }
+    }
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=CatchingMsgItemPool.js.map
+        

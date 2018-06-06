@@ -1,0 +1,7 @@
+require('libs/weapp-adapter-min');
+var Parser = require('libs/xmldom/dom-parser');
+window.DOMParser = Parser.DOMParser;
+require('libs/wx-downloader.js');
+wxDownloader.REMOTE_SERVER_ROOT = "http://172.12.10.126:8081/FireDragon";
+require('src/settings.3fd5f');
+require('main.f1079');

@@ -1,0 +1,170 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/PerpleMonster/Game.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '2625f1dGW5NaIUbQBvi3Jqz', 'Game', __filename);
+// scripts/Game.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        reloadOnGameOver: false,
+        readyToPlay: false,
+
+        //  star prefab
+        startPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
+
+        //  disappear duration of stars
+        starLife_MaxDuration: 0,
+        starLife_MinDuration: 0,
+
+        //  ground node, to get the ground height
+        ground: {
+            default: null,
+            type: cc.Node
+        },
+
+        //  player node, to get the player's jump height
+        player: {
+            default: null,
+            type: cc.Node
+        },
+
+        scoreAudio: {
+            default: null,
+            url: cc.AudioClip
+        }
+    },
+
+    //#region Life cycle
+    onEnable: function onEnable() {
+        this.eventsRegistration();
+    },
+
+    onLoad: function onLoad() {
+        this.varsInitOnLoad();
+    },
+
+    update: function update(dt) {
+        if (!this.readyToPlay) {
+            return;
+        }
+        if (this.elapsedTime > this.starLifeTime) {
+            this.gameOver();
+            return;
+        }
+        this.elapsedTime += dt;
+
+        var progressValue = 1 - this.elapsedTime / this.starLifeTime;
+        NOTIFICATION.emit(STAR_DISAPPEARING, { msg: progressValue.toString() });
+    },
+
+    onDisable: function onDisable() {
+        this.eventsDeRegistration();
+    },
+    //#endregion
+
+    //#region Game logic
+    eventsRegistration: function eventsRegistration() {
+        NOTIFICATION.on(GAME_START, this.onGameStart, this);
+        NOTIFICATION.on(GAME_OVER, this.onGameOver, this);
+        NOTIFICATION.on(GAME_PAUSED, this.onGamePaused, this);
+        NOTIFICATION.on(GAME_RESUME, this.onGameResume, this);
+        NOTIFICATION.on(GAME_RESTART, this.onGameRestart, this);
+    },
+
+    eventsDeRegistration: function eventsDeRegistration() {
+        NOTIFICATION.off(GAME_START, this.onGameStart, this);
+        NOTIFICATION.off(GAME_OVER, this.onGameOver, this);
+        NOTIFICATION.off(GAME_PAUSED, this.onGamePaused, this);
+        NOTIFICATION.off(GAME_RESUME, this.onGameResume, this);
+        NOTIFICATION.off(GAME_RESTART, this.onGameRestart, this);
+    },
+
+    varsInitOnLoad: function varsInitOnLoad() {
+        this.groundY = this.ground.y + this.ground.height / 2;
+
+        //  initial variables
+        this.elapsedTime = 0;
+        this.starLifeTime = 0;
+        this.score = 0;
+    },
+
+    onGameStart: function onGameStart() {
+        this.starSpawner();
+        this.readyToPlay = true;
+        this.player.getComponent('Player').onGameStart();
+    },
+
+    onGameOver: function onGameOver() {
+        this.readyToPlay = false;
+        this.player.getComponent('Player').onGameOver();
+    },
+
+    onGamePaused: function onGamePaused() {
+        this.readyToPlay = false;
+        this.player.getComponent('Player').onGamePaused();
+    },
+
+    onGameResume: function onGameResume() {
+        this.readyToPlay = true;
+        this.player.getComponent('Player').onGameResume();
+    },
+
+    onGameRestart: function onGameRestart() {
+        cc.director.loadScene('main');
+    },
+
+    starSpawner: function starSpawner() {
+        var newStar = cc.instantiate(this.startPrefab);
+        var starPos = this.getNewStarPosition();
+
+        this.node.getChildByName("GamePlay").addChild(newStar);
+
+        //  set reference of property: 'game' in 'Star.js', to make bridge for stars to get player's motion
+        newStar.getComponent('Star').game = this;
+        newStar.setPosition(starPos);
+        NOTIFICATION.emit(PROGRESSBAR_FOLLOWSTAR, { pos: starPos });
+
+        this.starLifeTime = this.starLife_MinDuration + cc.random0To1() * (this.starLife_MaxDuration - this.starLife_MinDuration);
+        this.elapsedTime = 0;
+    },
+
+    getNewStarPosition: function getNewStarPosition() {
+        var randX = 0;
+        var randY = 0;
+
+        randX = cc.randomMinus1To1() * this.node.width / 2;
+        randY = this.groundY + cc.random0To1() * this.player.getComponent('Player').jumpHeight + 50;
+        return cc.p(randX, randY);
+    },
+
+    gainScore: function gainScore() {
+        this.score += 1;
+        // this.scoreLable.string = this.scoreHintText + this.score.toString();
+        NOTIFICATION.emit(SCORE_CHANGED, { msg: this.score.toString() });
+        cc.audioEngine.playEffect(this.scoreAudio, false);
+    },
+
+    gameOver: function gameOver() {
+        NOTIFICATION.emit(GAME_OVER, { msg: 'gameOver, trigger to call GAME_OVER event', score: this.score.toString() });
+    }
+    //#endregion
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=Game.js.map
+        

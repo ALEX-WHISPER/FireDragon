@@ -1,0 +1,41 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/PerpleMonster/GameStatus.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '95150WEwx5Jjodm8qm/XYnq', 'GameStatus', __filename);
+// scripts/PerpleMonster/GameStatus.js
+
+'use strict';
+
+// var GAME_START = 'GameStart';
+// var GAME_PLAYING = 'GamePlaying';
+// var GAME_OVER = 'GameOver';
+// var GAME_PAUSED = 'GamePaused';
+// var GAME_RESUME = 'GameResume';
+// var GAME_RESTART = 'GameRestart';
+
+// var SCORE_CHANGED = 'ScoreChanged';
+// var STAR_DISAPPEARING = 'StarDisappearing';
+// var PROGRESSBAR_FOLLOWSTAR = 'ProgressBarFollowStar';
+
+window.GAME_START = 'GameStart';
+window.GAME_PLAYING = 'GamePlaying';
+window.GAME_OVER = 'GameOver';
+window.GAME_PAUSED = 'GamePaused';
+window.GAME_RESUME = 'GameResume';
+window.GAME_RESTART = 'GameRestart';
+
+window.SCORE_CHANGED = 'ScoreChanged';
+window.STAR_DISAPPEARING = 'StarDisappearing';
+window.PROGRESSBAR_FOLLOWSTAR = 'ProgressBarFollowStar';
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=GameStatus.js.map
+        

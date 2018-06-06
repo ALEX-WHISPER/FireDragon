@@ -1,0 +1,191 @@
+"use strict";
+cc._RF.push(module, 'e34312XjCVCuqg7FEOBilWT', 'request');
+// scripts/FireDragon/net/request.js
+
+'use strict';
+
+var net = require("net");
+var util = require('util');
+var ServerType = net.ServerType;
+// var UserManager = require('UserManager');    //  EASON COMMENT
+// const EventManager=require('EventManager');  //  EASON COMMENT
+var md5 = require('MD5');
+net.GatewayHeartbeat = function () {
+    var msg = net.MakeMsg("GatewayHeartbeat");
+    msg.free = 1;
+    net.SendMsg(msg, ServerType.PS, net.RoomId, false);
+};
+
+net.FastRegister = function () {
+    var msg = net.MakeMsg("FastRegisterRequest");
+    msg.reg_type = 4;
+    net.SendMsg(msg, ServerType.PS);
+};
+
+net.Login = function (name, password, sLicensekey) {
+    var msg = net.MakeMsg("ThreeWayLoginWithDeviceRequest");
+    if (msg === null) {
+        console.log("msg is null");
+        return;
+    }
+    msg.game_id = net.GameId;
+    msg.account = name; // 帐号名
+
+    msg.password_md5 = util.PwdMD5(password); // 密码的MD5结果
+
+    msg.authcode = ""; // 亲朋登陆凭证 
+
+    if (sLicensekey) {
+        msg.authcode = sLicensekey;
+    }
+    //   msg.deviceInfo ="";
+    msg.deviceInfo = util.getDeviceInfo() + ''; //客户端设备信息
+    // console.error('获取登录设备信息',msg.deviceInfo) 
+
+    msg.platform = util.getPlatFrom();
+    net.SendMsg(msg, ServerType.PS);
+};
+
+//登录成功确认绑定
+net.confirmAuthCode = function (aAuthCode) {
+    var msg = net.MakeMsg("AuthCodeConfirm");
+    msg.authcode = aAuthCode;
+    //   msg.userID = UserManager.User.id;  //  EASON COMMENT
+    net.SendMsg(msg, ServerType.PS);
+};
+
+//房间查询
+net.QueryArenaReq = function () {
+    var msg = net.MakeMsg("QueryArenaRequest");
+    msg.game_id = net.GameId;
+    net.SendMsg(msg, ServerType.PS);
+};
+
+net.QueryUserTableReq = function () {
+    console.log("net.QueryUserTableReq");
+    var msg = net.MakeMsg("QueryUserTableReq");
+    // msg.user_id = UserManager.Self().id  //  EASON COMMENT
+    net.SendMsg(msg, ServerType.MC, net.ArenaId);
+};
+
+//房间查询
+net.QueryArenaReq = function () {
+    var msg = net.MakeMsg("QueryArenaRequest");
+    msg.game_id = net.GameId;
+    net.SendMsg(msg, ServerType.PS);
+};
+
+//查询到arena后，点击发送此请求
+net.EnterArenaReq = function (arenaId, gameVersion) {
+    var msg = net.MakeMsg("UserEnterMCReq");
+    msg.cur_version = gameVersion.curVersion;
+    msg.min_version = gameVersion.minVersion;
+    msg.max_version = gameVersion.maxVersion;
+    net.SendMsg(msg, ServerType.MC, arenaId);
+};
+
+// net.EnterCustomTableReq = function(sn,areId){
+//     var  msg = net.MakeMsg("EnterCustomTableReq")
+//     msg.sn = sn
+//     msg.baofang_table_id = 0
+//     msg.baofang_id = 0
+//     var bfDefines = require("BaofangDefines")
+//     if(bfDefines.baofangNum){
+//         msg.baofang_id = bfDefines.baofangNum
+//     }
+//     if(bfDefines.baofangDesk){
+//         msg.baofang_table_id = bfDefines.baofangDesk
+//     } 
+//     net.SendMsg(msg,ServerType.MC,areId)
+// }
+
+net.HallEnterRoomReq = function () {
+    var msg = net.MakeMsg("HallEnterRoomReq");
+    net.SendMsg(msg, ServerType.MC, net.ArenaId);
+};
+
+net.HallSitInGSReq = function (uid, roomId) {
+    var msg = net.MakeMsg("HallSitInGSReq");
+    msg.user_dbid = uid;
+    net.SendMsg(msg, ServerType.GS, roomId);
+};
+
+net.CertificaitonLoginReq = function () {
+    var msg = net.MakeMsg("CertificaitonLoginReq");
+    // msg.user_dbid = UserManager.User.id; //  EASON COMMENT
+    // msg.certification =  UserManager.User.certification; //  EASON COMMENT
+    msg.game_id = net.GameId;
+    net.SendMsg(msg, ServerType.PS);
+};
+
+net.HallGsReadyReq = function () {
+    console.log('kaishile', net.RoomId);
+    var msg = net.MakeMsg("HallGsReadyReq");
+    net.SendMsg(msg, ServerType.GS, net.RoomId);
+};
+
+//击杀怪物调用接口
+net.RequestAttack = function (score, ratio, type) {
+    console.log('房间号', net.RoomId);
+    var msg = net.MakeMsg("RequestAttack");
+    msg.Score = score;
+    msg.Ratio = ratio;
+    msg.Type = type;
+    msg.IsHighMode = false;
+    net.SendMsg(msg, ServerType.GD, net.RoomId);
+};
+
+//保存数据接口
+net.RequestAdditional = function (id, data) {
+    var msg = net.MakeMsg("RequestAdditional");
+    msg.Id = id;
+    msg.Data = data;
+    net.SendMsg(msg, ServerType.GD, net.RoomId);
+};
+
+//获取服务器时间
+net.RequestGameServerTime = function () {
+    var msg = net.MakeMsg("RequestGameServerTime");
+    msg.bNewTime = true;
+    net.SendMsg(msg, ServerType.GD, net.RoomId);
+};
+
+//退出登录
+net.UserLogoutReq = function () {
+    var msg = net.MakeMsg("UserLogoutReq");
+    // msg.user_dbid = UserManager.User.id; //  EASON COMMENT
+    // msg.certification = UserManager.User.certification;  //  EASON COMMENT
+    msg.game_id = net.GameId;
+    msg.platform = 0;
+    net.SendMsg(msg, ServerType.PS, net.RoomId);
+};
+
+// //进入房间
+// net.HallEnterRoomReq = function (id) {
+//     var msg = net.MakeMsg("HallEnterRoomReq");
+//     net.SendMsg(msg, ServerType.MC, id);
+// };  
+
+//点劵兑换
+net.ticketExchangeGoldReq = function (userid, ticket, callBack) {
+    var sAddress = 'http://mapi.qpgame.com/Services/api.ashx';
+    var handle = "userticketchargecoin";
+    var SECURITY_KEY = "E8FE168AD73Fqp*s$yGAME";
+    var sign = handle + userid + ticket + net.GameId + 0 + SECURITY_KEY;
+    var url = cc.js.formatStr("%s?handle=%s&uid=%d&gameid=%s&ticket=%s&datatype=json&sign=%s&exchangetype=0", sAddress, handle, userid, net.GameId, ticket, md5.hex_md5(sign));
+    net.sendRequest(url, callBack);
+};
+
+net.sendRequest = function (url, callBack) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 400) {
+            var result = xhr.responseText;
+            if (callBack) callBack(result);
+        }
+    };
+    xhr.open("GET", url, true);
+    xhr.send();
+};
+
+cc._RF.pop();

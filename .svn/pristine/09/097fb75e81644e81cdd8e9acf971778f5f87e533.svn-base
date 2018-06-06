@@ -1,0 +1,161 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/Mall/MallView.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '252eecT5fVMb7vzkKVTg3rm', 'MallView', __filename);
+// scripts/FireDragon/Mall/MallView.js
+
+'use strict';
+
+var voucherItemSetting = require("VoucherManager");
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        confirmingPanle: {
+            default: null,
+            type: cc.Node
+        },
+
+        lackOfVoucherPanel: {
+            default: null,
+            type: cc.Node
+        },
+
+        //#region  Purchase UI elems
+        label_CurTreasure_Purchase: {
+            default: null,
+            type: cc.Label
+        },
+
+        toggle_AutoRedeem_Purchase: {
+            default: null,
+            type: cc.Toggle
+        },
+        //#endregion
+
+        //#region  Redeem UI elems
+        label_RedeemedAmount: {
+            default: null,
+            type: cc.Label
+        },
+
+        label_SliderMaxAmount: {
+            default: null,
+            type: cc.Label
+        },
+
+        label_CurTreasure_Redeem: {
+            default: null,
+            type: cc.Label
+        },
+
+        label_CashableTreasure_Redeem: {
+            default: null,
+            type: cc.Label
+        },
+
+        label_Rule: {
+            default: null,
+            type: cc.Label
+        },
+
+        slider_ChooseRedeemAmount: {
+            default: null,
+            type: cc.Slider
+        },
+        //#endregion
+
+        hasInited_Purchase: {
+            default: false,
+            visible: false
+        },
+        hasInited_Redeem: {
+            default: false,
+            visible: false
+        }
+    },
+
+    //  init/update UI content in purchase block
+    init_PurchaseBlock: function init_PurchaseBlock(initValueSet) {
+        var curTreasureAmount = initValueSet.curTreasureAmount;
+        var isAutoRedeem = initValueSet.isAutoRedeem;
+
+        this.label_CurTreasure_Purchase.string = curTreasureAmount;
+        this.toggle_AutoRedeem_Purchase.isChecked = this.hasInited_Purchase ? this.toggle_AutoRedeem_Purchase.isChecked : isAutoRedeem;
+
+        this.curTreasureAmount = curTreasureAmount;
+        this.hasInited_Purchase = true;
+    },
+
+    //  init/update UI content in redeem block
+    init_RedeemBlock: function init_RedeemBlock(initValueSet) {
+        var curTreasureAmount = initValueSet.curTreasureAmount;
+        var curVoucherPointAmount = initValueSet.curVoucherPointAmount;
+        var treasurePerPoint = initValueSet.treasurePerPoint;
+        var cashableTreasure = curVoucherPointAmount * treasurePerPoint;
+
+        this.label_CurTreasure_Redeem.string = this.label_CurTreasure_Redeem.string.replace(this.hasInited_Redeem ? this.curTreasureAmount : 'value', curTreasureAmount);
+        this.label_RedeemedAmount.string = curVoucherPointAmount;
+
+        this.label_SliderMaxAmount.string = this.label_SliderMaxAmount.string.replace(this.hasInited_Redeem ? this.curVoucherPointAmount : 'value', curVoucherPointAmount);
+        this.label_Rule.string = this.label_Rule.string.replace(this.hasInited_Redeem ? this.treasurePerPoint : 'value', treasurePerPoint);
+        this.label_CashableTreasure_Redeem.string = cashableTreasure;
+        this.slider_ChooseRedeemAmount.progress = 1;
+
+        this.curTreasureAmount = curTreasureAmount;
+        this.curVoucherPointAmount = curVoucherPointAmount;
+        this.redeemAmount = curVoucherPointAmount;
+        this.treasurePerPoint = treasurePerPoint;
+        this.cashableTreasure = cashableTreasure;
+
+        this.hasInited_Redeem = true;
+    },
+
+    //  hint panel when user has no voucher point
+    activateLackOfVoucherPanel: function activateLackOfVoucherPanel() {
+        if (this.lackOfVoucherPanel.active === false) {
+            this.lackOfVoucherPanel.active = true;
+        }
+    },
+
+    //  close the lackOfVoucher hint panel
+    deactivateLackOfVoucherPanel: function deactivateLackOfVoucherPanel() {
+        if (this.lackOfVoucherPanel.active === true) {
+            this.lackOfVoucherPanel.active = false;
+        }
+    },
+
+    //  open the confirm panel of voucher purchasing
+    activateConfirmPanel: function activateConfirmPanel() {
+        if (this.confirmingPanle.active === false) {
+            this.confirmingPanle.active = true;
+        }
+    },
+
+    //  close the confirm panel of voucher purchasing
+    deactivateConfirmPanel: function deactivateConfirmPanel() {
+        if (this.confirmingPanle.active === true) {
+            this.confirmingPanle.active = false;
+        }
+    },
+
+    //#region   for slider: update redeemed amount and slider length on user sliding
+    updateRedeemAmount: function updateRedeemAmount(tarRedeemAmount) {
+        this.label_RedeemedAmount.string = tarRedeemAmount;
+        this.label_CashableTreasure_Redeem.string = tarRedeemAmount * this.treasurePerPoint;
+    }
+    //#endregion
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=MallView.js.map
+        

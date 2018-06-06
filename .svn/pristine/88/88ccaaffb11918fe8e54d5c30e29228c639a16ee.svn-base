@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "dialogbox",
+    "texture": "2a43ccd4-6ee3-4e72-a61d-f6811e990f19",
+    "atlas": "",
+    "rect": [
+      37,
+      79,
+      213,
+      151
+    ],
+    "offset": [
+      18.5,
+      0
+    ],
+    "originalSize": [
+      250,
+      309
+    ]
+  }
+}

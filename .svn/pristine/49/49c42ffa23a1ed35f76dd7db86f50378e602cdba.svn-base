@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Button_77",
+    "texture": "89443c97-f283-41e8-8139-064de337e2f4",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      176,
+      179
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      176,
+      179
+    ]
+  }
+}

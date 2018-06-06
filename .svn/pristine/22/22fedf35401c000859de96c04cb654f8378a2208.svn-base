@@ -1,0 +1,54 @@
+"use strict";
+cc._RF.push(module, '31f0fWWjzlNPLvsUWdLjEKc', 'PlayerInput');
+// scripts/PlayerInput.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    onEnable: function onEnable() {
+        NOTIFICATION.on(GAME_START, this.onGameStart, this);
+    },
+
+    onDisable: function onDisable() {
+        NOTIFICATION.off(GAME_START, this.onGameStart, this);
+    },
+
+    onGameStart: function onGameStart() {
+        this.setPlayerInputControl();
+    },
+
+    setPlayerInputControl: function setPlayerInputControl() {
+        var self = this.getComponent('Player');
+
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, function (event) {
+            switch (event.keyCode) {
+                case cc.KEY.left:
+                    self.accLeft = true;
+                    self.accRight = false;
+                    break;
+                case cc.KEY.right:
+                    self.accLeft = false;
+                    self.accRight = true;
+                    break;
+                case cc.KEY.escape:
+                    NOTIFICATION.emit(GAME_PAUSED, { msg: 'hit Esc to pause the game' });
+                    break;
+            }
+        });
+
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, function (event) {
+            switch (event.keyCode) {
+                case cc.KEY.left:
+                    self.accLeft = false;
+                    break;
+                case cc.KEY.right:
+                    self.accRight = false;
+                    break;
+            }
+        });
+    }
+});
+
+cc._RF.pop();

@@ -1,0 +1,45 @@
+"use strict";
+cc._RF.push(module, 'f6fe8kbXgZCq4AL7sX08DoG', 'MallModel');
+// scripts/FireDragon/Mall/MallModel.js
+
+"use strict";
+
+var voucherValueStruct = cc.Class({
+    name: 'voucherValueStruct',
+
+    properties: {
+        voucherAmount: 0,
+        redeem_Treasure: 0,
+        redeem_vipDays: 0,
+        price_rmb: 0
+    }
+});
+
+var voucherItemSetting = require("VoucherManager");
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        isAutoRedeem: false,
+        redeemVoucherAmount: {
+            get: function get() {
+                return this._redeemVoucherAmount;
+            }
+        },
+        voucherValuesArray: {
+            default: [],
+            type: [voucherValueStruct]
+        }
+    },
+
+    init_RedeemBlock: function init_RedeemBlock(mallData_Redeem) {
+        this._redeemVoucherAmount = mallData_Redeem.curVoucherPointAmount;
+    },
+
+    updateRedeemVoucherAmount: function updateRedeemVoucherAmount(curRedeemAmount) {
+        this._redeemVoucherAmount = curRedeemAmount;
+    }
+});
+
+cc._RF.pop();

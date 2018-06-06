@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_zhezhao",
+    "texture": "bc2096ba-70f4-41e6-990a-81c826f64460",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      77,
+      76
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      77,
+      76
+    ]
+  }
+}

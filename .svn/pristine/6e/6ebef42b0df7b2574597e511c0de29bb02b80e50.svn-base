@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_fenye1",
+    "texture": "ebd11605-4665-43e9-9e2e-dca87f36caf8",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      297,
+      130
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      297,
+      130
+    ]
+  }
+}

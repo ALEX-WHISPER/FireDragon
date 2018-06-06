@@ -1,0 +1,25 @@
+"use strict";
+cc._RF.push(module, '56f79sV3eFJRar+Vpwsaeaz', 'BtnEventsController');
+// scripts/BtnEventsController.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {},
+
+    onClickPlay: function onClickPlay() {
+        NOTIFICATION.emit(GAME_START, { msg: 'onClickPlay, trigger to enter game entry' });
+    },
+
+    onClickResume: function onClickResume() {
+        NOTIFICATION.emit(GAME_RESUME, { msg: 'onClickResume, trigger to resume the game' });
+    },
+
+    onClickRestart: function onClickRestart() {
+        NOTIFICATION.emit(GAME_RESTART, { msg: 'onClickRestart, trigger to restart the game' });
+    }
+});
+
+cc._RF.pop();

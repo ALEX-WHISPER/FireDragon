@@ -1,0 +1,30 @@
+"use strict";
+cc._RF.push(module, 'fbc59AQigNHnbxBOqFH9t/V', 'UIActivationOnLoad');
+// scripts/FireDragon/UIActivationOnLoad.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {},
+
+    onLoad: function onLoad() {
+        var loadingBlock = cc.find('Canvas/LoadingBlock');
+        var wxLoginBlock = cc.find('Canvas/wxLoginBlock');
+        var enterRoomBlock = cc.find('Canvas/EnterRoomBlock');
+        var userCenterBlock = cc.find('Canvas/UserCenterBlock');
+        var gamePlayBlock = cc.find('Canvas/GamePlayBlock');
+        var mallBlock = cc.find('Canvas/MallBlock');
+
+        loadingBlock.active = true; //  加载
+        enterRoomBlock.active = true; //  选择房间
+        gamePlayBlock.active = true; //  进入游戏
+        mallBlock.active = true; //  商城
+
+        wxLoginBlock.active = false; //  微信登录
+        userCenterBlock.active = false;
+    }
+});
+
+cc._RF.pop();

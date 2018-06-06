@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_mianfeik",
+    "texture": "a3c2593c-6e46-4031-b332-e3ccbc454c6c",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      274,
+      145
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      274,
+      145
+    ]
+  }
+}

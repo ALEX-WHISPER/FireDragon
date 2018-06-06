@@ -1,0 +1,31 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/GamePlay/Enemies/Enemy_NonMulti.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '28682P+lOxNiJf4gkrbNvLg', 'Enemy_NonMulti', __filename);
+// scripts/FireDragon/Enemies/Enemy_NonMulti.js
+
+"use strict";
+
+var enemyBase = require("EnemyBase");
+
+cc.Class({
+    extends: enemyBase,
+
+    properties: {},
+
+    onGetCatched: function onGetCatched() {
+        enemyBase.prototype.onGetCatched.call(this);
+    }
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=Enemy_NonMulti.js.map
+        

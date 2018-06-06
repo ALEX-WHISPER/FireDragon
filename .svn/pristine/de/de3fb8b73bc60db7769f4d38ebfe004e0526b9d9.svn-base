@@ -1,0 +1,31 @@
+"use strict";
+cc._RF.push(module, 'c4cb4lrfchBU5O1oRT45zGY', 'UserClickButtonEvents');
+// scripts/FireDragon/GamePlay/Game/UserClickButtonEvents.js
+
+"use strict";
+
+var Flags = require("GameFlags");
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {},
+
+    onHitMainButton: function onHitMainButton() {
+        NOTIFICATION.emit(Flags.GAME_HIT_MAIN);
+    },
+
+    onReCharge: function onReCharge() {
+        NOTIFICATION.emit(Flags.GAME_2_MALL);
+    },
+
+    onMagAdd: function onMagAdd() {
+        NOTIFICATION.emit(Flags.MAG_ADD);
+    },
+
+    onMagMinus: function onMagMinus() {
+        NOTIFICATION.emit(Flags.MAG_MINUS);
+    }
+});
+
+cc._RF.pop();

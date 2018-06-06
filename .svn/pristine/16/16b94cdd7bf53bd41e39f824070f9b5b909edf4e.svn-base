@@ -1,0 +1,19 @@
+0000000000000000000000000000000000000000 653173179802d205aadb87d51901f8455321a750 ALEX-WHISPER <15196608305@163.com> 1524050224 +0800	commit (initial): first commit
+653173179802d205aadb87d51901f8455321a750 953c1aadf5fb405ae0b42f6eb5758fa6d4cad813 ALEX-WHISPER <15196608305@163.com> 1524050490 +0800	commit: add .gitignore
+953c1aadf5fb405ae0b42f6eb5758fa6d4cad813 90f3e954e173c93e304ec6cdd463b3f12c1cb8e4 ALEX-WHISPER <15196608305@163.com> 1524050588 +0800	commit: remove .gitignore.txt
+90f3e954e173c93e304ec6cdd463b3f12c1cb8e4 494c080a125d454c578888eabde203b33648f220 ALEX-WHISPER <15196608305@163.com> 1524050701 +0800	commit: upload project
+494c080a125d454c578888eabde203b33648f220 55d02cda6043a2c73bee9f94b812e66c067becc3 ALEX-WHISPER <15196608305@163.com> 1524453510 +0800	commit: Mall: purchase and redeem, done.
+55d02cda6043a2c73bee9f94b812e66c067becc3 b0bf23749d32a1c21ee6f5bb1fa57100185b64ac ALEX-WHISPER <15196608305@163.com> 1524455367 +0800	commit: check if lack of voucher point amount when switching between puchase and redeem block
+b0bf23749d32a1c21ee6f5bb1fa57100185b64ac 4de19b3e50d703f2fbb57d45ed4e0764b6ebce0b ALEX-WHISPER <15196608305@163.com> 1524457708 +0800	commit: fix bug on object pool, locate: line:107 in GameView.js
+4de19b3e50d703f2fbb57d45ed4e0764b6ebce0b 8a437b5be4a3bad22ee5f2d63c2e5f40945524c2 ALEX-WHISPER <15196608305@163.com> 1524465177 +0800	commit: update
+8a437b5be4a3bad22ee5f2d63c2e5f40945524c2 39c708f30f2a7a8c456c9783ebc473ddb419e764 ALEX-WHISPER <15196608305@163.com> 1524468172 +0800	commit: fix bug on auto redeeming
+39c708f30f2a7a8c456c9783ebc473ddb419e764 67187430c04f7c267fbcc7a7fbe97a5583f3d23c ALEX-WHISPER <15196608305@163.com> 1524479235 +0800	commit: loading interface, done.
+67187430c04f7c267fbcc7a7fbe97a5583f3d23c 5814ed7e1fcda223773e90d99aad17e237b03f90 ALEX-WHISPER <15196608305@163.com> 1524558346 +0800	commit: import net framework, finished loading and room entrance part
+5814ed7e1fcda223773e90d99aad17e237b03f90 b9d717a26b9728a885815e8513a4f111fbb31cce ALEX-WHISPER <15196608305@163.com> 1524566458 +0800	commit: remove unnecessary textures, handle plugin scripts: NOTIFICATION.js, GameStatus.js
+b9d717a26b9728a885815e8513a4f111fbb31cce 4c6dd02b5739aa0be3eb57f58aeb775b5b4d603b ALEX-WHISPER <15196608305@163.com> 1524654461 +0800	commit: build to WechatDeveloper Tool, succeeded compiling in IDE and previewing in mobile device
+4c6dd02b5739aa0be3eb57f58aeb775b5b4d603b cdaabe2a984fd0c82e67ea9e43c1ec13d943e333 ALEX-WHISPER <15196608305@163.com> 1524654696 +0800	commit: remove build/
+cdaabe2a984fd0c82e67ea9e43c1ec13d943e333 80acccd1156442cb9100fb771178035207c4e3fb ALEX-WHISPER <15196608305@163.com> 1524654776 +0800	commit: remove build/wechatgame
+80acccd1156442cb9100fb771178035207c4e3fb 0250a01ea426f93698e48a1fd503221ad2d256e5 ALEX-WHISPER <15196608305@163.com> 1524740047 +0800	commit: add wx api to get userInfo, like: avatar, nickName
+0250a01ea426f93698e48a1fd503221ad2d256e5 1515072b9d22aacc170093cf98d0c7b35ffdd819 ALEX-WHISPER <15196608305@163.com> 1524814839 +0800	commit: add UserCenter, add cashable treasure amount in redeem block
+1515072b9d22aacc170093cf98d0c7b35ffdd819 b7d321d35ac51f2519481c4cc7126c8367db853c ALEX-WHISPER <15196608305@163.com> 1524823095 +0800	commit: add comment to Game, Mall. Fixed bug on redeem slider
+b7d321d35ac51f2519481c4cc7126c8367db853c 10fbde8789707d5b4ce95411fcc22bc753fee71f ALEX-WHISPER <15196608305@163.com> 1524825595 +0800	commit: force to fix bug on: label_treasure in purchase block doesn't change anymore after initializing

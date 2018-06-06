@@ -1,0 +1,14 @@
+"use strict";
+cc._RF.push(module, 'b5adfyz3XhIvrTDmm6U72JU', 'MallFlags');
+// scripts/FireDragon/Mall/MallFlags.js
+
+'use strict';
+
+module.exports = {
+    MALL_CHOOSE_VOUCHER: 'Mall_Choose_Voucher',
+    MALL_CONFIRM_PURCHASE: 'Mall_Confirm_Purchase',
+
+    MALL_2_GAME: 'MallToGame'
+};
+
+cc._RF.pop();

@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_bianzy",
+    "texture": "cc916b91-7f90-4c88-b173-4f99d95abe52",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      6,
+      29
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      6,
+      29
+    ]
+  }
+}

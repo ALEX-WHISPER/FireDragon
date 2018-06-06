@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_xuanguanx",
+    "texture": "7916e672-7308-49ce-994c-061d5b7f4cbb",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      520,
+      7
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      520,
+      7
+    ]
+  }
+}

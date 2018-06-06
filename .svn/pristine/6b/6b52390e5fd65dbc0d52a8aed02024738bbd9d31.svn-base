@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_jindutiao3",
+    "texture": "b3e23a84-3c5e-4fb3-96d9-a76fcfa83729",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      490,
+      20
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      490,
+      20
+    ]
+  }
+}

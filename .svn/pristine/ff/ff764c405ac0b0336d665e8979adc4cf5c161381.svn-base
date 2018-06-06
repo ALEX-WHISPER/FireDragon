@@ -1,0 +1,23 @@
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+    },
+
+    onLoad: function() {
+        let loadingBlock = cc.find('Canvas/LoadingBlock');
+        let wxLoginBlock = cc.find('Canvas/wxLoginBlock');
+        let enterRoomBlock = cc.find('Canvas/EnterRoomBlock');
+        let userCenterBlock = cc.find('Canvas/UserCenterBlock');
+        let gamePlayBlock = cc.find('Canvas/GamePlayBlock');
+        let mallBlock = cc.find('Canvas/MallBlock');
+
+        loadingBlock.active = true; //  加载
+        enterRoomBlock.active = true;   //  选择房间
+        gamePlayBlock.active = true;    //  进入游戏
+        mallBlock.active = true;        //  商城
+
+        wxLoginBlock.active = false; //  微信登录
+        userCenterBlock.active = false;
+    }
+});

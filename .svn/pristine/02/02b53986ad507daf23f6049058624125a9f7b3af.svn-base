@@ -1,0 +1,81 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/wxLogin/wxLoginControl.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '1eb9ey1UZhOBL0ofog2qVgr', 'wxLoginControl', __filename);
+// scripts/FireDragon/wxLogin/wxLoginControl.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        wxUserInfoControl: require("wxUserInfoDisplay")
+    },
+
+    onLoad: function onLoad() {
+        // if (this.node.parent.getChildByName('wxLoginPanel') != null) {
+        //     this.node.parent.getChildByName('wxLoginPanel').active = false;
+        // }
+    },
+
+    onWxLogin: function onWxLogin() {
+        if (cc.sys.isBrowser) {
+            this.wxLoginSuccessCallBack();
+        } else if (cc.sys.WECHAT_GAME) {
+            this.wxAuthorize();
+        }
+    },
+
+    wxAuthorize: function wxAuthorize() {
+        var self = this;
+        wx.authorize({
+            scope: 'scope.userInfo',
+            success: function success() {
+                console.log('authorize: success');
+                // self.wxUserInfoControl.getUserInfo();
+                self.wxUserInfoControl.enableGetUserInfo();
+                self.wxLogin();
+            },
+
+            fail: function fail(res) {
+                console.log('authorize: failed: ' + res.errMsg);
+            }
+        });
+    },
+
+    wxLogin: function wxLogin() {
+        var self = this;
+        wx.login({
+            success: function success(res) {
+                if (res.code) {
+                    console.log("login success, server handling...");
+                    self.wxLoginSuccessCallBack();
+                } else {
+                    console.log("login failed: " + res.errMsg);
+                }
+            },
+
+            fail: function fail() {
+                console.log("login failed: " + res.errMsg);
+            }
+        });
+    },
+
+    wxLoginSuccessCallBack: function wxLoginSuccessCallBack() {
+        cc.find('Canvas/EnterRoomBlock/EnterRoomPanel').active = true;
+        this.node.parent.active = false;
+    }
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=wxLoginControl.js.map
+        

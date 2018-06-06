@@ -1,0 +1,41 @@
+"use strict";
+cc._RF.push(module, 'cd591li0SxPM6TKzSm+YHRS', 'CatchingMsgItemPool');
+// scripts/FireDragon/GamePlay/ObjectPools/CatchingMsgItemPool.js
+
+"use strict";
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        itemTemplate: cc.Prefab,
+        maxCount: 30,
+
+        itemPool: {
+            get: function get() {
+                return this._itemPool;
+            },
+
+            set: function set(value) {
+                this._itemPool = value;
+            },
+
+            visible: false
+        }
+    },
+
+    onLoad: function onLoad() {
+        this.poolInit();
+    },
+
+    poolInit: function poolInit() {
+        this.itemPool = new cc.NodePool();
+
+        for (var i = 0; i < this.maxCount; i++) {
+            var item = cc.instantiate(this.itemTemplate);
+            this.itemPool.put(item);
+        }
+    }
+});
+
+cc._RF.pop();

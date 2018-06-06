@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_jinek",
+    "texture": "584c6d0f-ab53-4010-9cc2-6fd3a47490e7",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      248,
+      52
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      248,
+      52
+    ]
+  }
+}

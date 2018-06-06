@@ -1,0 +1,438 @@
+var ByteBuffer = require("bytebuffer");
+var ProtoBuf = require("protobuf");  
+// const EventManager=require('EventManager');  //  EASON COMMENT
+
+var net = {} 
+net.ServerIp = "172.12.10.126";  //  FireDragon
+// net.ServerIp = "testqpddd.qianz.com"     // 测试IP 
+// net.ServerIp = "172.12.10.75"     // qf测试IP 
+// net.ServerIp="112.74.79.163"      //aliyun 33939
+// net.ServerIp="119.23.48.231"         //预发布
+// net.ServerIp="172.12.10.138"      
+// net.ServerIp="120.76.193.250"      //审核服
+// net.ServerIp="qpddd.cy9527.com"      //正式发布
+// net.ServerIp="172.12.10.69"      //localhost
+// net.ServerIp="172.12.10.53"      //hhl
+// net.ServerIp="120.25.124.150"         //h5审核 
+net.ServerPort=[8081];  
+// net.ServerPort = [19999,20000,20001,20002];//"19996"//"19996"//19999"
+net.GameId =10004
+net.UserId = 0
+net.ArenaId = 106
+net.CmdId = 0
+net.RoomId = 68
+net.TableId = 0
+net.SceneId = 0
+net.PlayerStatus = 0
+net.EnterRoomType = 0
+net.GameRules = ""
+net.RoomSn = 0
+
+net.openId = ""
+net.unionid = ""
+net.rspSuccess = true
+net.loginOk = false
+net.accessToken = ""
+
+net.isActive = false
+net.waitGatewayHeartbeatNum = 0
+
+net.isLoaded = false;
+
+net.lastMsgTime = 0;
+
+net.Market=1;
+
+net.WebId = 40033; 
+net.gameIng=false;
+
+// net.indexPort=Math.ceil(Math.random()*4)-1; 
+net.indexPort=0;  //记录当前端口
+ 
+var ServerType = {
+    HALL: 1,//		--客户端大厅
+    PS: 2,//			--广场
+    MC: 3,//			--比赛调度程序，工程名MatchCtrl
+    GS: 4,//			--比赛桌子服务器，工程名已改为TableServer，命名为GS为了符合大家的习惯称呼
+    CC: 5,//			--比赛管理中心，工程名预定为ControlCenter
+    CS: 6,//			--远程控制服务，工程名预定为CtrlService，不一定会用到SG，先定义好占个名额
+    SG: 7,//			--ServerGate
+    IS: 8,//			--信息服务中心，工程名InformationService，包括公告、好友、聊天、短信报警、web通信等模块
+    DBE: 9,//			--DBEngineCenter，不一定会用到，但系统中有此服务程序，定义一个占位置
+    CHAT: 10,//         --预留聊天服务器，现在还没有聊天服务器。ServerGate直接转给聊天MC，MC再转给ServerGate实现世界聊天
+    GD: 39//			--game message
+}
+net.ServerType = ServerType
+
+const CMD_GAME_DATA = 1039 
+net.MakePack = function (nCommand, msg, nTargetType, nServerID = 0) {
+    var msgDv = null
+    var msgLen = 0 
+    if(msg){
+        msg = msg.toBuffer()
+        msgDv = new DataView(msg)
+        msgLen = msg.byteLength
+    }
+    var ab = null
+    var dv = null
+    var pos = 0
+    if (nTargetType == ServerType.GD) {
+        ab = new ArrayBuffer(4 + 15 + msgLen)
+        dv = new DataView(ab)
+        dv.setInt32(pos, 15 + msgLen, true); pos += 4
+        dv.setUint8(pos, ServerType.GS, true); pos += 1
+        dv.setInt32(pos, nServerID, true); pos += 4
+        dv.setInt32(pos, 0, true); pos += 4
+        dv.setInt16(pos, CMD_GAME_DATA, true); pos += 2
+        dv.setInt32(pos, nCommand, true); pos += 4
+    } else {
+        ab = new ArrayBuffer(4 + 11 + msgLen)
+        dv = new DataView(ab);
+        dv.setInt32(pos, 11 + msgLen, true); pos += 4
+        dv.setUint8(pos, nTargetType, true); pos += 1
+        dv.setInt16(pos, nServerID, true); pos += 2
+        dv.setInt16(pos, 0, true); pos += 2
+        dv.setInt32(pos, 0, true); pos += 4
+        dv.setInt16(pos, nCommand, true); pos += 2
+    }
+    for (var i = 0; i < msgLen; i++ , pos++) {
+        dv.setUint8(pos, msgDv.getUint8(i))
+    }
+    return ab
+}
+
+var protoList = {}
+net.LoadProto = function (name, callback) {
+    cc.loader.loadRes("proto/" + name, function (err, data) {
+        protoList[name] = ProtoBuf.protoFromString(data)
+        // EventManager.Dispatch('netSuccess');     //  EASON COMMENT
+        if(callback){ 
+            callback()
+        }
+    })
+}
+
+var proto = {}
+net.MakeMsg = function(msgName, cmd, pack) {
+    if(!msgName && cmd){
+        msgName = net.MsgCmd[cmd]
+    }
+    if(!cmd){
+        cmd = net.MsgCmd[msgName]
+    }
+    net.CmdId = cmd
+    var msg = proto[msgName]
+    if (!msg) {
+        for (var protoName in protoList) {
+            msg = protoList[protoName].build("SY."+msgName)
+            if (msg) {
+                proto[msgName] = msg
+                break
+            }
+        }
+    }
+    if(msg && pack){
+        return msg.decode(pack)
+    }
+    return msg ? new msg() : null
+}
+
+
+//网络出现故障时的缓存消息，重连后会依次发送出来
+// var CacheSendMsgs = new Array()
+net.SendMsg = function(msg, nServerType, nServerId, b = true){
+    var pack = net.MakePack(net.CmdId, msg, nServerType, nServerId)
+    console.log("--->Send cmd:"+net.MsgCmd[net.CmdId] + ", CmdId: " + net.CmdId + "，Msg："+JSON.stringify(msg))
+    if(ws != null && ws.readyState === WebSocket.OPEN)
+    { 
+        ws.send(pack);
+    }
+    else
+    {
+        net.close();
+        // cc.director.getScene().getChildByName('Canvas').getChildByName('WindowLayer').getComponent('WindowLayer').openTips('1003');
+        // CacheSendMsgs.push(pack);
+        // net.Connect();
+    }
+}
+
+/* //循环从将缓存消息队列中的消息按顺序发送到服务器
+    net.sendCacheMsg = function()
+    {
+        console.log("cache msg send start. msg num = " + CacheSendMsgs.length + ", ws=" + ws);
+        if(ws != null && ws.readyState === WebSocket.OPEN)
+        {
+            for(var pack = CacheSendMsgs.shift(); pack != undefined;)
+            {
+                ws.send(pack);
+            }
+            console.log("cache msg send finish.");
+        }
+    }
+*/
+
+net.OnRecvMsg = function(pack){ 
+    var dv = new DataView(pack);
+    var pos = 11;
+    var len = pack.byteLength;
+    var cmd = -1;
+    if(len >= 11)
+    {
+        cmd = dv.getUint16(9, true)
+    }
+    else{
+        console.error("------OnRecvMsg, cmd: " + cmd + ", len: " + len);
+        return null;
+    }
+    if(cmd == CMD_GAME_DATA){
+        if(len >= 15)
+        {
+            cmd = dv.getInt32(11, true)
+            pos = 15
+        }
+        else
+        {
+            console.error("------OnRecvMsg, cmd: " + cmd + ", len: " + len);
+            return null;
+        }
+    }
+    pack = pack.slice(pos);
+
+    var msg = net.MakeMsg(null, cmd, pack);
+    return {cmd : cmd, msg : msg}
+}
+
+var onMsgList = {}
+net.OnMsg = function(cmd, callback){
+    onMsgList[cmd] = callback
+}
+
+
+//输出网络数据包的内容
+net.printNetDataInfo = function(pack, err){
+
+    var dv = new DataView(pack)
+    var len = pack.byteLength;
+    console.error("------ onmessage parse error ----------")
+    if(err)
+    {
+        console.error(err.stack)
+    }
+
+    var mo = len % 4;
+    if(mo == 0)
+    {
+        var view32 = new Uint32Array(pack);
+        var str = "32位：";
+        for(var i=0; i < view32.length; i++)
+        {
+            str += view32[i].toString(2) + ","
+        }
+        console.log(view32.length + "----------------------, "  + str)
+    }
+    else
+    {
+        var str = "8位：";
+        var view8 = new Uint8Array(pack);
+        for(var j=0; j < mo; j++)
+        {
+            str += view8[j].toString(2) + ","
+        }
+
+        if(view8.length > 4)
+        {
+            str += "---|32位：---"
+            var data = pack.slice(mo);
+            var view32 = new Uint32Array(data);
+            for(var i=0; i < view32.length; i++)
+            {
+                str += view32[i].toString(2) + ","
+            }
+        }
+        console.log(view32.length + "----------------------, "  + str)
+    }
+}
+
+var ws = null
+net.Connect = function() { 
+    if(net.conneting)
+        return ;
+
+    if(ws){
+        console.log("------ws Connect find ws != null. " + ws.readyState + ", " + ws.url)
+        ws.onopen = function (event) {
+            console.log("---close ws onopen---. " + ws.readyState + ", " + ws.url)
+        }
+        ws.onmessage = function (event) {
+            console.log("---close ws onmessage---. " + ws.readyState + ", " + ws.url)
+        }
+        ws.onerror = function (event) {
+            console.log("---close ws onerror---. " + ws.readyState + ", " + ws.url)
+        }
+        ws.onclose = function (event) {
+            console.log("---close ws onclose---. " + ws.readyState + ", " + ws.url)
+        }
+        ws.close();
+        ws = null;
+        return ;
+    }
+
+    net.lastMsgTime = new Date();
+
+    net.conneting = true;
+    //sendList.length = 0
+    // var globalFunc1 = cc.director.getScene().getChildByName('GlobalNode').getComponent('Functions')
+    // var ip = globalFunc1.getIp()
+    // var port = globalFunc1.getPort()
+    var IP_ = net.ServerIp
+    var PORT_ = net.ServerPort[net.indexPort]
+    // cc.log(ip)
+    // cc.log(port)
+    // if(ip==null)
+    // {
+
+    // }
+    // else
+    // {
+        // IP_ = ip
+    // }
+    // if(port==null)
+    // {
+
+    // }
+    // else
+    // {
+        // PORT_ = port
+    // }
+    var connectStr = "ws://"+IP_+":"+PORT_;
+    console.log("------ws Connect str = " + connectStr);
+    setTimeout(function() {
+        ws = new WebSocket(connectStr)
+        ws.binaryType = "arraybuffer"
+        ws.onopen = function (event) {
+            this.connectNum=0;
+            console.log("------ws onopen net.loginOk is " + net.loginOk)
+            // cc.director.getScene().getChildByName('Canvas').getChildByName('LoginLayer').getChildByName("test").getChildByName("lianjie").active=false;
+            //网络连接成功
+            // EventManager.Dispatch('netSuccess'); //  EASON COMMENT
+            net.conneting = false;
+            net.isActive = true
+            //连接成功，则进行登录处理.
+            if(net.loginOk)
+            {
+                //已经登录过后的重连，通过token登录
+                // setTimeout(function() {
+                //     net.CertificaitonLoginReq();
+                // }, 0.01); 
+                // CacheSendMsgs.length = 0
+            }
+            // else
+            // {
+            //     console.log("------ws onopen first login. ")  
+            // }
+        }
+
+        ws.onmessage = function (event) {
+            
+            net.lastMsgTime = new Date();//网络检测
+            net.waitGatewayHeartbeatNum = 0;//网络检测
+
+            setTimeout(function() {
+                // UIManager.WaitEnd()
+                var rsp;
+                var len = event.data.byteLength;
+                try
+                {
+                    console.log("msg data size " + event.data.byteLength)
+                    rsp = net.OnRecvMsg(event.data); 
+                    if(rsp == null)
+                    {
+                        //console.error(" recv msg function parse msg error ");
+                        net.printNetDataInfo(event.data, null);
+                        return;
+                    }
+                }
+                catch(err)
+                {
+                    console.log("CATCH err")
+                    //console.error(" recv msg catch error " + event.data);
+                    net.printNetDataInfo(event.data, err);
+                    return;
+                } 
+                try {
+                    console.log("--->Recv cmd:"+net.MsgCmd[rsp.cmd] + ",Msg："+JSON.stringify(rsp))    
+                    var callback = onMsgList[rsp.cmd]
+                    if(!callback){
+                        callback = net["On"+net.MsgCmd[rsp.cmd]]
+                    }
+                    if(callback){ 
+                        callback(rsp.msg)
+                    }
+                }
+                catch (error) { 
+                    console.error("------ onmessage callback find  logic error:  " + rsp.cmd + ", " + error.stack);
+                    console.error("--->Recv cmd:" + net.MsgCmd[rsp.cmd] + "，Msg：" + JSON.stringify(rsp));
+                }
+            },100);
+        }
+
+        ws.onerror = function (event) {
+            console.log("---ws onerror---. ")
+            net.conneting = false;
+            ws.close();
+            console.log("lianjieshibai")  
+        }
+
+        ws.onclose = function (event) {
+            console.log("---ws onclose---. ")
+            net.conneting = false;
+            ws = null
+            net.isActive = false  
+            if(net.loginOk){
+                net.loginOk=false;
+                cc.director.getScene().getChildByName('Canvas').getChildByName('WindowLayer').getComponent('WindowLayer').openTips('1003');
+                cc.director.getScene().getChildByName('Canvas').getChildByName('MainLayer').getComponent('Player').resetGame(2);  
+            }else{
+                if(net.indexPort<net.ServerPort.length){ 
+                   net.Connect(); 
+                   net.indexPort++;
+                }else{
+                   net.indexPort=0;
+                }  
+            } 
+      }
+    }.bind(this),0);
+}
+
+net.getWSState = function()
+{
+    if(ws == null)
+        return WebSocket.CLOSED;
+    return ws.readyState;
+}
+
+net.close = function()
+{
+    console.log("net.Close------>")
+    if (ws)
+        ws.close();
+}
+
+const UserStatus =
+{
+	Offline:0,
+	Out:1 ,
+	Logout:2,
+	Delegated:3,
+	InArena:4,
+	InRoom:5,
+	WaitReenter:6,
+	Sit:7,
+	Ready:8,
+	Playing:9,
+	OnPhone:10,
+}
+
+net.UserStatus = UserStatus;
+
+module.exports = net

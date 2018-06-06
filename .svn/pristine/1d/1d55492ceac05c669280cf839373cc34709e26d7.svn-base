@@ -1,0 +1,54 @@
+"use strict";
+cc._RF.push(module, '54432HU5FpJM6G39W+6Q0kT', 'MiniHintOnLoading');
+// scripts/FireDragon/Loading/MiniHintOnLoading.js
+
+"use strict";
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        fadeInDuration: 1,
+        existDuration: 2,
+        fadeOutDuration: 1,
+
+        hintItemArray: [cc.String],
+        label_miniHint: cc.Label
+    },
+
+    onLoad: function onLoad() {
+        this.initItemTempArray();
+    },
+
+    start: function start() {
+        this.showNextHint();
+        this.label_miniHint.node.runAction(this.setFadingAction());
+    },
+
+    initItemTempArray: function initItemTempArray() {
+        this.hintItemTempArray = [];
+        for (var i = 0; i < this.hintItemArray.length; i++) {
+            this.hintItemTempArray = cc.js.array.copy(this.hintItemArray);
+        }
+    },
+
+    setFadingAction: function setFadingAction() {
+        this.label_miniHint.node.opacity = 0;
+        var fadeIn = cc.fadeIn(this.fadeInDuration);
+        var delay = cc.delayTime(this.existDuration);
+        var fadeOut = cc.fadeOut(this.fadeOutDuration);
+
+        return cc.repeatForever(cc.sequence(fadeIn, delay, fadeOut, cc.callFunc(this.showNextHint.bind(this))));
+    },
+
+    showNextHint: function showNextHint() {
+        if (this.hintItemTempArray.length <= 0) {
+            this.initItemTempArray();
+        }
+        var randomIndex = Math.floor(Math.random() * this.hintItemTempArray.length);
+        this.label_miniHint.string = this.hintItemTempArray[randomIndex];
+        cc.js.array.removeAt(this.hintItemTempArray, randomIndex);
+    }
+});
+
+cc._RF.pop();

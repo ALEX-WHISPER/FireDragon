@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_biansx",
+    "texture": "1ffebb39-049f-4d33-94a2-28fe4cf4df57",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      584,
+      12
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      584,
+      12
+    ]
+  }
+}

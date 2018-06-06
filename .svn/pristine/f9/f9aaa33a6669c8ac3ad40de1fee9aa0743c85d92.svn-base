@@ -1,0 +1,59 @@
+2018-05-21T08:48:41.354Z - normal: Load ~/.CocosCreator/settings.json
+2018-05-21T08:48:41.357Z - normal: checking language setting...
+2018-05-21T08:48:41.357Z - normal: Language: en
+2018-05-21T08:48:42.954Z - success: protocol editor-framework registered
+2018-05-21T08:48:42.955Z - success: protocol app registered
+2018-05-21T08:48:42.955Z - success: protocol theme registered
+2018-05-21T08:48:42.955Z - success: protocol packages registered
+2018-05-21T08:48:42.955Z - success: protocol unpack registerred
+2018-05-21T08:48:42.955Z - success: protocol disable-commonjs registerred
+2018-05-21T08:48:43.284Z - normal: connected!
+2018-05-21T08:48:43.286Z - normal: Check project D:\WorkSpace\start_project
+2018-05-21T08:48:43.288Z - normal: Initializing Cocos2d
+2018-05-21T08:48:43.458Z - normal: Initializing Asset Database
+2018-05-21T08:48:43.485Z - success: protocol uuid registerred
+2018-05-21T08:48:43.485Z - success: protocol db registerred
+2018-05-21T08:48:43.485Z - success: protocol thumbnail registerred
+2018-05-21T08:48:43.485Z - normal: Loading editor/builtin packages
+2018-05-21T08:48:43.500Z - success: anysdk loaded
+2018-05-21T08:48:43.595Z - success: assets loaded
+2018-05-21T08:48:43.596Z - success: builder loaded
+2018-05-21T08:48:43.598Z - success: cocos-analytics loaded
+2018-05-21T08:48:43.600Z - success: console loaded
+2018-05-21T08:48:43.602Z - success: hierarchy loaded
+2018-05-21T08:48:43.604Z - success: inspector loaded
+2018-05-21T08:48:43.604Z - success: keystore loaded
+2018-05-21T08:48:43.606Z - success: node-library loaded
+2018-05-21T08:48:43.607Z - success: package-asset loaded
+2018-05-21T08:48:43.608Z - success: preferences loaded
+2018-05-21T08:48:43.609Z - success: project-exporter loaded
+2018-05-21T08:48:43.625Z - success: project-importer loaded
+2018-05-21T08:48:43.626Z - success: project-settings loaded
+2018-05-21T08:48:43.628Z - success: ui-kit loaded
+2018-05-21T08:48:43.629Z - success: ui-grid loaded
+2018-05-21T08:48:43.632Z - success: scene loaded
+2018-05-21T08:48:43.633Z - success: sprite-editor loaded
+2018-05-21T08:48:43.635Z - success: store loaded
+2018-05-21T08:48:43.638Z - success: timeline loaded
+2018-05-21T08:48:43.638Z - normal: Loading builtin packages
+2018-05-21T08:48:43.640Z - success: asset-db-debugger loaded
+2018-05-21T08:48:43.641Z - success: code-editor loaded
+2018-05-21T08:48:43.641Z - success: color-picker loaded
+2018-05-21T08:48:43.643Z - success: package-manager loaded
+2018-05-21T08:48:43.645Z - success: sdkbox loaded
+2018-05-21T08:48:43.648Z - success: tester loaded
+2018-05-21T08:48:43.649Z - success: ui-kit-preview-extra loaded
+2018-05-21T08:48:43.650Z - success: ui-kit-preview loaded
+2018-05-21T08:48:43.651Z - success: ui-tree loaded
+2018-05-21T08:48:44.485Z - normal: Initializing project D:\WorkSpace\start_project
+2018-05-21T08:48:44.486Z - normal: Loading packages
+2018-05-21T08:48:44.490Z - normal: Watching packages
+2018-05-21T08:48:44.499Z - normal: Run Application
+2018-05-21T08:48:45.107Z - success: preview server running at http://localhost:7456
+2018-05-21T08:48:49.100Z - normal: 1.8.2
+2018-05-22T03:57:24.743Z - warn: Should not set alpha via 'color', set 'opacity' please.
+2018-05-22T03:57:25.694Z - warn: Should not set alpha via 'color', set 'opacity' please.
+2018-05-22T03:58:05.815Z - warn: Should not set alpha via 'color', set 'opacity' please.
+2018-05-22T04:04:26.321Z - warn: [db-task][sync-changes] Backup unused meta file: db://assets/res/textures/FireDragon/切图/hl_hongbao.png.meta
+2018-05-22T04:22:30.278Z - warn: Should not set alpha via 'color', set 'opacity' please.
+2018-05-22T04:29:58.567Z - warn: Should not set alpha via 'color', set 'opacity' please.

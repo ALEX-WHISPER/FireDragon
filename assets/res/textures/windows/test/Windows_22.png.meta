@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "d4e9090f-6373-4a70-a850-5b6ddd2300be",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "Windows_22": {
+      "ver": "1.0.3",
+      "uuid": "a302cf8a-c84d-4239-a54f-5f54013c4c21",
+      "rawTextureUuid": "d4e9090f-6373-4a70-a850-5b6ddd2300be",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 98,
+      "height": 115,
+      "rawWidth": 98,
+      "rawHeight": 115,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

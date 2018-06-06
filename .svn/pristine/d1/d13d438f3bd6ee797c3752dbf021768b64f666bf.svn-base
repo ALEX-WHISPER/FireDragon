@@ -1,0 +1,35 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/test/NetTest.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, 'a307cqi4D1Oy4ICVX7WrAUo', 'NetTest', __filename);
+// scripts/FireDragon/test/NetTest.js
+
+"use strict";
+
+var net = require("net");
+
+cc.Class({
+    extends: cc.Component,
+
+    start: function start() {
+        var name = "test";
+        var pwd = "233";
+        var sLicenseKey = 1;
+        net.Login(name, pwd, sLicenseKey);
+        net.Connect();
+
+        // console.log(net.MakeMsg(name));
+    }
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=NetTest.js.map
+        

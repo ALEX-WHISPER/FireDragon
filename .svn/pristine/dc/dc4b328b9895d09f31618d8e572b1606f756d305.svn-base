@@ -1,0 +1,46 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/EnterRoom/GameInfoDisplay.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, '23313vjzttNv5fGkvZT0QAx', 'GameInfoDisplay', __filename);
+// scripts/FireDragon/EnterRoom/GameInfoDisplay.js
+
+"use strict";
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        _gameModel: {
+            default: null,
+            type: require("GameModel"),
+            visible: true
+        },
+        curTreature_EnterRoom: cc.Node
+    },
+
+    onLoad: function onLoad() {
+        this.setGameInfo();
+    },
+
+    setGameInfo: function setGameInfo() {
+        var label_curTreasure = this.curTreature_EnterRoom.getComponent(cc.Label);
+
+        label_curTreasure.string = label_curTreasure.string.replace(this.hasInited ? this.curTreasure : 'value', this._gameModel.curTreasure);
+
+        this.curTreasure = this._gameModel.curTreasure;
+        console.log("curTreature in GameInfoDisplay: " + this.curTreasure);
+        this.hasInited = true;
+    }
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=GameInfoDisplay.js.map
+        

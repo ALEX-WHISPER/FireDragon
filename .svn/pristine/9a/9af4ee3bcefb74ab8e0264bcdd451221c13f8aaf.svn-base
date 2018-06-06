@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_jiajinbi",
+    "texture": "31b7b949-47a5-4355-bdc0-7aec4ab00c80",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      100,
+      95
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      100,
+      95
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_buhuobz",
+    "texture": "da57b258-4f70-41a7-ab86-c19798c8eb80",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      263,
+      62
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      263,
+      62
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+"use strict";
+cc._RF.push(module, '58209WJQMdNQaHaUc2I4NhK', 'EnemyBase');
+// scripts/FireDragon/GamePlay/Enemies/EnemyBase.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        enemyName: '',
+        cardinalNum: 0,
+        enemyImg: cc.SpriteFrame,
+        spawningRate: {
+            visible: false,
+
+            get: function get() {
+                return this._spawningRate;
+            },
+
+            set: function set(value) {
+                this._spawningRate = value;
+            }
+        },
+
+        killMsg: '金币: + '
+    },
+
+    onGetCatched: function onGetCatched() {}
+});
+
+cc._RF.pop();

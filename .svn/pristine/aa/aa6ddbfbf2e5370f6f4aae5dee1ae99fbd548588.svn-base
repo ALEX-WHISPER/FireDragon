@@ -1,0 +1,251 @@
+var enemyBase = require("EnemyBase");
+var flags = require("GameFlags");
+
+var magRangeStruct = cc.Class({
+    name: 'magRangeStruct',
+    properties: {
+        max: 0, min: 0
+    }
+});
+
+var treasureRangeStruct = cc.Class({
+    name: 'treasureRangeStruct',
+    properties: {
+        max: 0, min: 0
+    }
+});
+
+cc.Class({
+    extends: cc.Component,
+
+    editor: {
+        executionOrder: -2
+    },
+
+    properties: () => ({
+        catchActionInterval: 2,
+        
+        //#region rules
+        treasureRangeArrayForEveryRoom: {
+            default: [],
+            type: treasureRangeStruct
+        },
+        magRangeArrayForEvenryRoom: {
+            default: [],
+            type: magRangeStruct
+        },
+        //#endregion
+        
+        //#region Data
+
+        //  当前房间类型下标
+        curRoomIndex: {
+            get: function() {return this._curRoomIndex;},
+            visible: false
+        },
+
+        //  当前点券数
+        curVoucherPoint: {
+            get: function() {return this._curVoucherPoint;},
+            visible: false
+        },
+
+        //  当前金币数
+        curTreasure: {
+            get: function() { return this._curTreasure;},
+            visible: false
+        },
+
+        //  当前房间金币范围
+        curTreasureRange: {
+            get: function() {
+                console.log("curTreasureRange: " + this.treasureRangeArrayForEveryRoom[this.roomIndex]);
+                return this.treasureRangeArrayForEveryRoom[this.curRoomIndex];
+            },
+            type: treasureRangeStruct,
+            visible: false
+        },
+
+        //  当前倍率
+        curMag: {
+            get: function() {return this._curMag;},
+            visible: false
+        },
+
+        //  倍率间隔
+        magInterval: {
+            get: function() {return this._magInterval;},
+            visible: false
+        },
+
+        //  倍率范围
+        curMagRange: {
+            get: function() {return this.magRangeArrayForEvenryRoom[this.curRoomIndex];},
+            type: magRangeStruct,
+            visible: false
+        },
+
+        //  每张点券兑换多少金币
+        treasurePerPoint: {
+            get: function() {return this._treasurePerPoint;},
+            visible: false
+        },
+
+        //  亲朋id
+        QP_ID: {
+            get: function() {return this._QP_ID;},
+            visible: false
+        },
+
+        bindingAccount: {
+            get: function() {return this._bindingAccount;},
+            visible: false
+        },
+        //#endregion
+        
+        enemies: {
+            default: [],
+            type: [enemyBase]
+        },
+
+        curEnemyIndex: {
+            default: 0,
+            visible: false
+        },
+
+        totalCardinal: {
+            default: 0,
+            visible: false
+        },
+    }),
+
+    onLoad: function() {
+        this.gameValuesInit();
+    },
+
+    start: function() {
+        this.selection_sort();  //  after sorting, the enemy array has been sorted ascendingly basic on cardinalNum
+
+        for(let i = 0; i < this.enemies.length; i++) {
+            console.log(this.enemies[i].enemyName + ": " + this.enemies[i].cardinalNum);
+        }
+
+        //  calc the total cardinal number, to confirm the spawning rate of each enemy
+        for (let i = 0; i < this.enemies.length; i++) {
+            this.totalCardinal += this.enemies[i].cardinalNum;
+        }
+
+        //  calc the spawning rate of each enemy
+        for (let i = 0; i < this.enemies.length; i++) {
+            this.enemies[i].spawningRate = this.enemies[i].cardinalNum / this.totalCardinal;
+            if (i > 0) this.enemies[i].spawningRate += this.enemies[i - 1].spawningRate;
+            console.log(this.enemies[i].enemyName + "'s spawningRange: " + this.enemies[i].spawningRate);
+        }
+    },
+
+    getCurTreasureRange: function(roomIndex) {
+        return this.treasureRangeArrayForEveryRoom[roomIndex];
+    },
+
+    startHangingUp: function() {
+        this.schedule(this.onStartSpawning, this.catchActionInterval);
+    },
+
+    pauseHangingUp: function() {
+        this.unschedule(this.onStartSpawning, this);
+    },
+
+    onStartSpawning: function() {
+        this.enemySpawner();    //  生成怪物
+        this.enemyCatcher();    //  尝试捕获
+    },
+
+    enemySpawner: function() {
+        let calcSpawningRate = cc.random0To1();
+        for(let i = 0; i < this.enemies.length; i++) {
+            if (calcSpawningRate <= this.enemies[i].spawningRate) {
+                this.curEnemyIndex = i;
+                break;
+            }
+        }
+        // this.curEnemyIndex = Math.floor(Math.random() * this.enemies.length);
+        console.log("CalcSpawningNum: " + calcSpawningRate + ", spawned enemy: " + this.enemies[this.curEnemyIndex].enemyName);
+    },
+
+    enemyCatcher: function() {
+        //  randomize a num as the catching rate
+        var calcCatchingRate = Math.random();
+        var enemyCatchingRate = this.enemies[this.curEnemyIndex].catchingRate;
+        console.log("CalcCatchingRate: " + calcCatchingRate + ", RealCatchingRate: " + enemyCatchingRate);
+
+        if (calcCatchingRate <= enemyCatchingRate) {
+            //  enemy get caught
+            NOTIFICATION.emit(flags.ENEMY_GET_CAUGHT, {msg: this.enemies[this.curEnemyIndex].enemyName});
+        } else {
+            //  enemy get escaped
+            NOTIFICATION.emit(flags.ENEMY_GET_ESCAPED, {msg: this.enemies[this.curEnemyIndex].enemyName});
+        }
+
+        NOTIFICATION.emit(flags.ENEMY_CATCH_ATTEMPT, {msg: this.enemies[this.curEnemyIndex].enemyName});
+    },
+
+    setEnteredRoomIndex: function(roomIndex) {
+        this._curRoomIndex = roomIndex;
+        console.log("ENTER ROOM: " + this.curRoomIndex);
+    },
+
+    setNewTreasure: function(newTreasure) {
+        if (this.curTreasure != newTreasure) {
+            this._curTreasure = newTreasure;
+            console.log("update treasure: " + newTreasure);            
+        }
+    },
+
+    setNewMag: function(newMag) {
+        if(this.curMag != newMag)
+            this._curMag = newMag;
+    },
+
+    setNewMagInterval: function(newMagInterval) {
+        if(this.magInterval != newMagInterval)    
+            this._magInterval = newMagInterval;
+    },
+
+    setNewVoucherPoint: function(newVoucherPoint) {
+        if(this.curVoucherPoint != newVoucherPoint) {
+            this._curVoucherPoint = newVoucherPoint;
+            console.log("update voucher point: " + newVoucherPoint);            
+        }
+    },
+
+    selection_sort: function() {
+        for (let i = 0; i < this.enemies.length; i++) {
+            let minCardinal = this.enemies[i].cardinalNum;
+            let minIndex = i;
+
+            for (let j = i; j < this.enemies.length; j++) {
+                if (this.enemies[j].cardinalNum < minCardinal) {
+                    minCardinal = this.enemies[j].cardinalNum;
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i) {
+                let temp = this.enemies[minIndex];
+                this.enemies[minIndex] = this.enemies[i];
+                this.enemies[i] = temp;
+            }
+        }
+    },
+
+    //  FOR DEVELOPER TESTING
+    gameValuesInit: function() {
+        this._curVoucherPoint = 50;
+        this._curTreasure = 999;
+        this._curMag = 1;
+        this._magInterval = 1;
+        this._treasurePerPoint = 2000;
+        this._QP_ID = '233333333';
+        this._bindingAccount = '00544-44944'
+    }
+});

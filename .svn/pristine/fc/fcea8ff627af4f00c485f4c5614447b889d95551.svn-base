@@ -1,0 +1,42 @@
+(function() {"use strict";var __module = CC_EDITOR ? module : {exports:{}};var __filename = 'preview-scripts/assets/scripts/FireDragon/UIActivationOnLoad.js';var __require = CC_EDITOR ? function (request) {return cc.require(request, require);} : function (request) {return cc.require(request, __filename);};function __define (exports, require, module) {"use strict";
+cc._RF.push(module, 'fbc59AQigNHnbxBOqFH9t/V', 'UIActivationOnLoad', __filename);
+// scripts/FireDragon/UIActivationOnLoad.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {},
+
+    onLoad: function onLoad() {
+        var loadingBlock = cc.find('Canvas/LoadingBlock');
+        var wxLoginBlock = cc.find('Canvas/wxLoginBlock');
+        var enterRoomBlock = cc.find('Canvas/EnterRoomBlock');
+        var userCenterBlock = cc.find('Canvas/UserCenterBlock');
+        var gamePlayBlock = cc.find('Canvas/GamePlayBlock');
+        var mallBlock = cc.find('Canvas/MallBlock');
+
+        loadingBlock.active = true; //  加载
+        enterRoomBlock.active = true; //  选择房间
+        gamePlayBlock.active = true; //  进入游戏
+        mallBlock.active = true; //  商城
+
+        wxLoginBlock.active = false; //  微信登录
+        userCenterBlock.active = false;
+    }
+});
+
+cc._RF.pop();
+        }
+        if (CC_EDITOR) {
+            __define(__module.exports, __require, __module);
+        }
+        else {
+            cc.registerModuleFunc(__filename, function () {
+                __define(__module.exports, __require, __module);
+            });
+        }
+        })();
+        //# sourceMappingURL=UIActivationOnLoad.js.map
+        

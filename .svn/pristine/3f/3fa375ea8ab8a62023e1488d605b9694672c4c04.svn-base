@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_dianquan4",
+    "texture": "c0c74d28-1474-4c00-9795-eb65273af086",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      166,
+      135
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      166,
+      135
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+"use strict";
+cc._RF.push(module, 'ebf7dDNuNxFXpGOFP5VLJKj', 'LoadingBarControl');
+// scripts/FireDragon/Loading/LoadingBarControl.js
+
+'use strict';
+
+cc.Class({
+    extends: cc.Component,
+
+    properties: {
+        loginBlock: cc.Node,
+        loadingBlock: cc.Node,
+
+        loadingBar: cc.ProgressBar,
+        defaultLoadingText: '',
+
+        //  default: "检测版本更新..."
+        //  0: 最新版本："游戏资源加载中，请稍候..."
+        //  1: 检测到新版本
+        loadingStatus: 0,
+
+        label_LoadingInfo: cc.Label,
+        loadingSpeed: 0,
+
+        confirm_Update: cc.Node,
+        isLoadingStatusChecked: {
+            default: false,
+            visible: false
+        }
+    },
+
+    start: function start() {
+        this.updateCheck();
+    },
+
+    update: function update(dt) {
+        if (!this.isLoadingStatusChecked) {
+            return;
+        }
+        this.updateLoadingInfo(dt);
+    },
+
+    updateCheck: function updateCheck() {
+        var _this = this;
+
+        var setDefaultText = cc.callFunc(function () {
+            _this.loadingBar.progress = 0;
+            _this.label_LoadingInfo.string = _this.defaultLoadingText;
+        });
+
+        var delay = cc.delayTime(1);
+        var updateResultCheck = cc.callFunc(this.updateResultCheck.bind(this));
+
+        this.node.runAction(cc.sequence(setDefaultText, delay, updateResultCheck));
+    },
+
+    updateResultCheck: function updateResultCheck() {
+        this.isLoadingStatusChecked = true;
+        console.log("trigger to enter update");
+
+        switch (this.loadingStatus) {
+            case 0:
+                this.label_LoadingInfo.string = '游戏资源加载中，请稍候...';
+                break;
+            case 1:
+                this.confirm_Update.active = true;
+                this.isLoadingStatusChecked = false;
+                this.label_LoadingInfo.string = '正在更新，请稍候...';
+                break;
+        }
+    },
+
+    updateLoadingInfo: function updateLoadingInfo(dt) {
+        var progress = this.loadingBar.progress;
+        progress += dt * this.loadingSpeed;
+        this.loadingBar.progress = progress;
+
+        if (this.loadingBar.progress >= 1) {
+            console.log("loading, done");
+            this.isLoadingStatusChecked = false;
+
+            this.loadingBlock.active = false;
+            this.loginBlock.active = true;
+        }
+    },
+
+    onConfirmVersionUpdated: function onConfirmVersionUpdated() {
+        if (this.confirm_Update.active) {
+            this.confirm_Update.active = false;
+            this.isLoadingStatusChecked = true;
+        }
+        console.log("confirm update");
+    },
+
+    onCancleVersionUpdated: function onCancleVersionUpdated() {
+        if (this.confirm_Update.active) {
+            this.confirm_Update.active = false;
+            this.isLoadingStatusChecked = false;
+        }
+        console.log("cancled update");
+    }
+});
+
+cc._RF.pop();

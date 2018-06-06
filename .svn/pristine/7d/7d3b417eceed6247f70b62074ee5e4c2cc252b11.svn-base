@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_huanggou",
+    "texture": "0349a5b8-0c59-4d13-9fd6-783ecf778230",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      55,
+      48
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      55,
+      48
+    ]
+  }
+}

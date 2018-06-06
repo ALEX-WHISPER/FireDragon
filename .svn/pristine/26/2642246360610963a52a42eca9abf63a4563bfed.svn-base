@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_shangcheng",
+    "texture": "bdc21fab-4dc9-4ddc-ae0d-996c33d25708",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      73,
+      39
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      73,
+      39
+    ]
+  }
+}

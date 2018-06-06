@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hl_touming50",
+    "texture": "ceab5e2e-cdc5-4031-a543-af29d0f3cfcc",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      71,
+      91
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      71,
+      91
+    ]
+  }
+}
