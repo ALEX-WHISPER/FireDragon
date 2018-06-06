@@ -1,4 +1,3 @@
-
 //#region custom structs
 
 //  购买点券涉及到的值所组成的结构

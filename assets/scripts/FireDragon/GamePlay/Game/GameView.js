@@ -14,11 +14,6 @@ cc.Class({
         scrollItemTotalCount: 0,    //  视窗内的记录数量
         scrollItemMaxCount: 30,     //  视窗内最多可容纳的记录数
 
-        catchingMinusInfo: {
-            default: null,
-            type: cc.Node
-        },
-
         //  对象池控制脚本
         msgItemPoolController: {
             default: null,
@@ -63,13 +58,6 @@ cc.Class({
         this.caughtCount = 0;
         this.items = []; // array to store spawned items
         this.labelChanged_PlayButton(1);    //  默认为暂停状态，需玩家点击触发游戏开始
-    },
-
-    start: function() {
-        if (!this.catchingMinusInfo.active) {
-            this.catchingMinusInfo.active = true;
-            this.catchingMinusInfo.opacity = 0;
-        }
     },
 
 //#region update data

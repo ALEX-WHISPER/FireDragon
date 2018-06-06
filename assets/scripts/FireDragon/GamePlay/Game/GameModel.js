@@ -27,7 +27,6 @@ cc.Class({
         catchActionInterval: 2,
         
         //#region rules
-
         //  每个房间的金币准入值范围
         treasureRangeArrayForEveryRoom: {
             default: [],
