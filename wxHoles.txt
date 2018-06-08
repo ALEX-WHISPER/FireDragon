@@ -1,0 +1,15 @@
+分享功能无权限：
+	ERROR: showShareMenu: fail no permission
+	REASON: 无效的AppId
+	SOLUTION: 使用在微信公众平台上注册的有效AppID
+
+无法创建 UserInfoButton
+	ERROR: wx.CreateUserInfoButton is not a function
+	CAUSE: UserInfoButton wx.createUserInfoButton(Object object) 基础库 2.0.1 开始支持
+	SOLUTION: 更新微信开发者工具，并在 详情->调试基础库，设置基础库为2.0.1及以上
+
+创建 UserInfoButton 后按钮不显示
+	SOLUTION: IDE中无法显示，需用真机预览
+
+创建 UserInfoButton，IDE中不报错，真机预览报上述错误
+	SOLUTION: 重启微信，再次进入小程序
